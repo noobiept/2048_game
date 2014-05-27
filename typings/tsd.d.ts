@@ -4,3 +4,4 @@
 /// <reference path="preloadjs/preloadjs.d.ts" />
 /// <reference path="soundjs/soundjs.d.ts" />
 /// <reference path="createjs-lib/createjs-lib.d.ts" />
+/// <reference path="underscore/underscore.d.ts" />

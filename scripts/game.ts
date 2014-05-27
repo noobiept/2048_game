@@ -1,5 +1,6 @@
 /// <reference path='block.ts' />
 /// <reference path='utilities.ts' />
+/// <reference path='move_animation.ts' />
 
 module Game
 {
@@ -18,12 +19,11 @@ for (var column = 0 ; column < mapLength ; column++)
 
     for (var line = 0 ; line < mapLength ; line++)
         {
-        BLOCKS[ column ][ line ] = new Block({
-                column: column,
-                line: line
-            });
+        BLOCKS[ column ][ line ] = null;
         }
     }
+
+MoveAnimation.init();
 
 addRandomBlock();
 
@@ -33,12 +33,17 @@ document.body.addEventListener( 'keyup', keyUpEvents );
 
 export function addRandomBlock()
 {
+var emptyBlocks = getEmptyBlocks();
+
 var position;
 
     // get the block
-position = getRandomInt( 0, Block.emptyBlocks.length - 1 );
+position = getRandomInt( 0, emptyBlocks.length - 1 );
 
-var block = Block.emptyBlocks[ position ];
+var blockPosition = emptyBlocks[ position ];
+
+var column = blockPosition.column;
+var line = blockPosition.line;
 
     // get the value
 var possibleValues = [ 2, 4 ];
@@ -48,92 +53,52 @@ position = getRandomInt( 0, possibleValues.length - 1 );
 var value = possibleValues[ position ];
 
 
-block.setValue( value );
-}
+var block = new Block({
+        column: column,
+        line: line,
+        value: value
+    });
 
-
-function play( direction: Direction )
-{
-var lines = [];
-
-if ( direction == Direction.left )
-    {
-    for (var line = 0 ; line < G.MAP_LENGTH ; line++)
-        {
-        lines[ line ] = [];
-
-        for (var column = G.MAP_LENGTH - 1 ; column >= 0 ; column--)
-            {
-            lines[ line ].push( BLOCKS[ column ][ line ] );
-            }
-        }
-    }
-
-else if ( direction == Direction.right )
-    {
-    for (var line = 0 ; line < G.MAP_LENGTH ; line++)
-        {
-        lines[ line ] = [];
-
-        for (var column = 0 ; column < G.MAP_LENGTH ; column++)
-            {
-            lines[ line ].push( BLOCKS[ column ][ line ] );
-            }
-        }
-    }
-
-else if ( direction == Direction.up )
-    {
-    for (var column = 0 ; column < G.MAP_LENGTH ; column++)
-        {
-        lines[ column ] = [];
-
-        for (var line = G.MAP_LENGTH - 1 ; line >= 0 ; line--)
-            {
-            lines[ column ].push( BLOCKS[ column ][ line ] );
-            }
-        }
-    }
-
-else if ( direction == Direction.down )
-    {
-    for (var column = 0 ; column < G.MAP_LENGTH ; column++)
-        {
-        lines[ column ] = [];
-
-        for (var line = 0 ; line < G.MAP_LENGTH ; line++)
-            {
-            lines[ column ].push( BLOCKS[ column ][ line ] );
-            }
-        }
-    }
-
-else
-    {
-    console.log( 'error, wrong direction.' );
-    return;
-    }
-
-
-combine( lines );
-moveAll( lines );
+BLOCKS[ blockPosition.column ][ blockPosition.line ] = block;
 }
 
 
 
 
-function combine( lines )
+function getEmptyBlocks()
 {
-for (var a = 0 ; a < lines.length ; a++)
+var emptyBlocks = [];
+
+for (var column = 0 ; column < G.MAP_LENGTH ; column++)
     {
-    var line = lines[ a ];
+    for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+        {
+        if ( BLOCKS[ column ][ line ] === null )
+            {
+            emptyBlocks.push({
+                    column: column,
+                    line: line
+                });
+            }
+        }
+    }
+
+return emptyBlocks;
+}
+
+
+function moveLeft()
+{
+    // combine
+for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+    {
     var firstBlock = null;
 
-    for (var b = 0 ; b < line.length ; b++)
+    for (var column = G.MAP_LENGTH - 1 ; column >= 0 ; column--)
         {
-        var block = line[ b ];
+        var block = BLOCKS[ column ][ line ];
 
-        if ( !block.isEmpty )
+        if ( block !== null )
             {
             if ( firstBlock === null )
                 {
@@ -145,7 +110,8 @@ for (var a = 0 ; a < lines.length ; a++)
                 if ( firstBlock.value == block.value )
                     {
                     block.setValue( block.value * 2 );
-                    firstBlock.setValue( 0 );
+
+                    removeBlock( firstBlock );
                     break;  // only one combination per line
                     }
 
@@ -157,51 +123,221 @@ for (var a = 0 ; a < lines.length ; a++)
             }
         }
     }
-}
 
-/*
-    Move all the used blocks to the end of the array
- */
 
-function moveAll( lines )
-{
-var block;
-
-for (var a = 0 ; a < lines.length ; a++)
+    // count and move
+    // loop in the opposite direction
+for (var line = 0 ; line < G.MAP_LENGTH ; line++)
     {
-    var line = lines[ a ];
-    var usedBlocksValues = [];
-    var b;
+    var position = 0;
 
-    for (b = 0 ; b < line.length ; b++)
+    for (var column = position ; column < G.MAP_LENGTH ; column++)
         {
-        block = line[ b ];
+        var block = BLOCKS[ column ][ line ];
 
-        if ( !block.isEmpty )
+        if ( block !== null )
             {
-            usedBlocksValues.push( block.value );
+            BLOCKS[ block.column ][ block.line ] = null;
+            block.moveTo( position, line );
+            BLOCKS[ position ][ line ] = block;
+            position++;
             }
         }
+    }
+}
 
-        var emptyBlocksLength = line.length - usedBlocksValues.length;
 
-        for (b = 0 ; b < line.length ; b++)
+function moveRight()
+{
+    // combine
+for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+    {
+    var firstBlock = null;
+
+    for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+        {
+        var block = BLOCKS[ column ][ line ];
+
+        if ( block !== null )
             {
-            block = line[ b ];
-
-            if ( b < emptyBlocksLength )
+            if ( firstBlock === null )
                 {
-                block.setValue( 0 );
+                firstBlock = block;
                 }
 
             else
                 {
-                block.setValue( usedBlocksValues[ b - emptyBlocksLength ] );
+                if ( firstBlock.value == block.value )
+                    {
+                    block.setValue( block.value * 2 );
+
+                    removeBlock( firstBlock );
+                    break;  // only one combination per line
+                    }
+
+                else
+                    {
+                    firstBlock = block;
+                    }
                 }
             }
+        }
     }
 
+
+    // count and move
+    // loop in the opposite direction
+for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+    {
+    var position = G.MAP_LENGTH - 1;
+
+    for (var column = position ; column >= 0 ; column--)
+        {
+        var block = BLOCKS[ column ][ line ];
+
+        if ( block !== null )
+            {
+            BLOCKS[ block.column ][ block.line ] = null;
+            block.moveTo( position, line );
+            BLOCKS[ position ][ line ] = block;
+            position--;
+            }
+        }
+    }
 }
+
+
+
+function moveUp()
+{
+    // combine
+for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+    {
+    var firstBlock = null;
+
+    for (var line = G.MAP_LENGTH - 1 ; line >= 0 ; line--)
+        {
+        var block = BLOCKS[ column ][ line ];
+
+        if ( block !== null )
+            {
+            if ( firstBlock === null )
+                {
+                firstBlock = block;
+                }
+
+            else
+                {
+                if ( firstBlock.value == block.value )
+                    {
+                    block.setValue( block.value * 2 );
+
+                    removeBlock( firstBlock );
+                    break;  // only one combination per line
+                    }
+
+                else
+                    {
+                    firstBlock = block;
+                    }
+                }
+            }
+        }
+    }
+
+
+    // count and move
+    // loop in the opposite direction
+for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+    {
+    var position = 0;
+
+    for (var line = position ; line < G.MAP_LENGTH ; line++)
+        {
+        var block = BLOCKS[ column ][ line ];
+
+        if ( block !== null )
+            {
+            BLOCKS[ block.column ][ block.line ] = null;
+            block.moveTo( column, position );
+            BLOCKS[ column ][ position ] = block;
+            position++;
+            }
+        }
+    }
+}
+
+
+
+function moveDown()
+{
+    // combine
+for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+    {
+    var firstBlock = null;
+
+    for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+        {
+        var block = BLOCKS[ column ][ line ];
+
+        if ( block !== null )
+            {
+            if ( firstBlock === null )
+                {
+                firstBlock = block;
+                }
+
+            else
+                {
+                if ( firstBlock.value == block.value )
+                    {
+                    block.setValue( block.value * 2 );
+
+                    removeBlock( firstBlock );
+                    break;  // only one combination per line
+                    }
+
+                else
+                    {
+                    firstBlock = block;
+                    }
+                }
+            }
+        }
+    }
+
+
+    // count and move
+    // loop in the opposite direction
+for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+    {
+    var position = G.MAP_LENGTH - 1;
+
+    for (var line = position ; line >= 0 ; line--)
+        {
+        var block = BLOCKS[ column ][ line ];
+
+        if ( block !== null )
+            {
+            BLOCKS[ block.column ][ block.line ] = null;
+            block.moveTo( column, position );
+            BLOCKS[ column ][ position ] = block;
+            position--;
+            }
+        }
+    }
+}
+
+
+
+
+function removeBlock( block )
+{
+BLOCKS[ block.column ][ block.line ] = null;
+
+block.remove();
+}
+
 
 
 function keyUpEvents( event )
@@ -210,25 +346,25 @@ var key = event.keyCode;
 
 if ( key == EVENT_KEY.leftArrow )
     {
-    play( Direction.left );
+    moveLeft();
     addRandomBlock();
     }
 
 else if ( key == EVENT_KEY.rightArrow )
     {
-    play( Direction.right );
+    moveRight();
     addRandomBlock();
     }
 
 else if ( key == EVENT_KEY.upArrow )
     {
-    play( Direction.up );
+    moveUp();
     addRandomBlock();
     }
 
 else if ( key == EVENT_KEY.downArrow )
     {
-    play( Direction.down );
+    moveDown();
     addRandomBlock();
     }
 }

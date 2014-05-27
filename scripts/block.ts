@@ -4,7 +4,6 @@
 class Block
 {
     value: number;
-    isEmpty: boolean;
     column: number;
     line: number;
 
@@ -12,9 +11,22 @@ class Block
     valueElement;
     containerElement;
 
+    move: MoveAnimation.Move;
+
     static size = 50;
-    static colors = { '0': 'gray', '2': 'brown', '4': 'red', '8': 'blue' };
-    static emptyBlocks = [];
+    static colors = {
+        '2': 'rgb(243,243,241)',
+        '4': 'rgb(192,243,241)',
+        '8': 'rgb(243,177,241)',
+        '16': 'rgb(243,163,138)',
+        '32': 'rgb(164,170,118)',
+        '64': 'rgb(123,181,230)',
+        '128': 'rgb(197,255,183)',
+        '256': 'rgb(241,113,153)',
+        '512': 'rgb(255,243,191)',
+        '1024': 'rgb(243,150,64)',
+        '2048': 'rgb(116,108,255)'
+    };
 
 
 constructor( args )
@@ -25,9 +37,10 @@ constructor( args )
     this.setupShape();
     this.positionIn( this.column, this.line );
 
+    this.move = new MoveAnimation.Move( this.containerElement );
+
     this.value = 0;
-    this.isEmpty = false;   // its false so that the .setValue below works (to assume its changing from a occupied block to an empty one)
-    this.setValue( 0 );
+    this.setValue( args.value );
     }
 
 setupShape()
@@ -51,43 +64,27 @@ positionIn( column, line )
     {
     var size = Block.size;
 
+    this.column = column;
+    this.line = line;
+
     this.containerElement.x = size * column;
     this.containerElement.y = size * line;
     }
 
 moveTo( column, line )
     {
+    var size = Block.size;
 
+    this.column = column;
+    this.line = line;
+
+    this.move.start( size * column, size * line, 100 );
     }
 
 setValue( value )
     {
     this.value = value;
-
-    if ( value === 0 )
-        {
-        if ( !this.isEmpty )
-            {
-            this.isEmpty = true;
-            this.valueElement.text = '';
-            Block.emptyBlocks.push( this );
-            }
-        }
-
-    else
-        {
-        if ( this.isEmpty )
-            {
-            this.isEmpty = false;
-
-            var index = Block.emptyBlocks.indexOf( this );
-
-            Block.emptyBlocks.splice( index, 1 );
-            }
-
-
-        this.valueElement.text = value;
-        }
+    this.valueElement.text = value;
 
     this.setBackgroundColor( Block.colors[ value.toString() ] )
     }
@@ -100,5 +97,10 @@ setBackgroundColor( color )
     g.beginFill( color );
     g.drawRoundRect( 0, 0, Block.size, Block.size, 3 );
     g.endFill();
+    }
+
+remove()
+    {
+    G.STAGE.removeChild( this.containerElement );
     }
 }
