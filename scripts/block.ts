@@ -63,22 +63,24 @@ setupShape()
 positionIn( column, line )
     {
     var size = Block.size;
+    var lineSize = G.GRID_LINE_SIZE;
 
     this.column = column;
     this.line = line;
 
-    this.containerElement.x = size * column;
-    this.containerElement.y = size * line;
+    this.containerElement.x = (size + lineSize) * column;
+    this.containerElement.y = (size + lineSize) * line;
     }
 
 moveTo( column, line )
     {
     var size = Block.size;
+    var lineSize = G.GRID_LINE_SIZE;
 
     this.column = column;
     this.line = line;
 
-    this.move.start( size * column, size * line, 100 );
+    this.move.start( (size + lineSize) * column, (size + lineSize) * line, 100 );
     }
 
 setValue( value )
@@ -95,7 +97,7 @@ setBackgroundColor( color )
 
     g.clear();
     g.beginFill( color );
-    g.drawRoundRect( 0, 0, Block.size, Block.size, 3 );
+    g.drawRect( 0, 0, Block.size, Block.size );
     g.endFill();
     }
 

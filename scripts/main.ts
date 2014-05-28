@@ -15,7 +15,8 @@
 var G = {
         CANVAS: null,
         STAGE: null,
-        MAP_LENGTH: 4
+        MAP_LENGTH: 4,
+        GRID_LINE_SIZE: 2
     };
 
 window.onload = function()

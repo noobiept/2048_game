@@ -6,7 +6,7 @@ module Game
 {
 var BLOCKS = [];
 
-enum Direction { left, right, up, down }
+var GRID_LINES = [];
 
 
 export function init()
@@ -25,10 +25,42 @@ for (var column = 0 ; column < mapLength ; column++)
 
 MoveAnimation.init();
 
+var blockSize = Block.size;
+var lineSize = G.GRID_LINE_SIZE;
+var mapLength = G.MAP_LENGTH;
+
+for (var a = 1 ; a < mapLength ; a++)
+    {
+    var position = blockSize * a + (a - 1) * lineSize;
+    var length = mapLength * blockSize + (mapLength - 1) * lineSize;
+
+    drawLine( position, 0, lineSize, length );
+    drawLine( 0, position, length, lineSize );
+    }
+
+
 addRandomBlock();
 
 document.body.addEventListener( 'keyup', keyUpEvents );
 }
+
+
+function drawLine( x, y, width, height )
+{
+var line = new createjs.Shape();
+
+var g = line.graphics;
+
+g.beginFill( 'rgb(170,170,170)' );
+g.drawRoundRect( x, y, width, height, 5 );
+g.endFill();
+
+GRID_LINES.push( line );
+
+G.STAGE.addChild( line );
+}
+
+
 
 
 export function addRandomBlock()
