@@ -41,6 +41,9 @@ constructor( args )
 
     this.value = 0;
     this.setValue( args.value );
+
+    this.containerElement.alpha = 0;
+    createjs.Tween.get( this.containerElement).to( { alpha: 1 }, 500 );
     }
 
 setupShape()
@@ -103,6 +106,11 @@ setBackgroundColor( color )
 
 remove()
     {
-    G.STAGE.removeChild( this.containerElement );
+    var _this = this;
+
+    createjs.Tween.get( this.containerElement ).to( { alpha: 0 }, 200 ).call( function()
+        {
+        G.STAGE.removeChild( _this.containerElement );
+        });
     }
 }

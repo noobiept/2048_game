@@ -84,14 +84,11 @@ position = getRandomInt( 0, possibleValues.length - 1 );
 
 var value = possibleValues[ position ];
 
-
-var block = new Block({
+addBlock({
         column: column,
         line: line,
         value: value
     });
-
-BLOCKS[ blockPosition.column ][ blockPosition.line ] = block;
 }
 
 
@@ -116,6 +113,27 @@ for (var column = 0 ; column < G.MAP_LENGTH ; column++)
     }
 
 return emptyBlocks;
+}
+
+
+function isThereEmptyBlocks()
+{
+var mapLength = G.MAP_LENGTH;
+
+for (var column = 0 ; column < mapLength ; column++)
+    {
+    for (var line = 0 ; line < mapLength ; line++)
+        {
+        var block = BLOCKS[ column ][ line ];
+
+        if ( block === null )
+            {
+            return true;
+            }
+        }
+    }
+
+return false;
 }
 
 
@@ -169,9 +187,8 @@ for (var line = 0 ; line < G.MAP_LENGTH ; line++)
 
         if ( block !== null )
             {
-            BLOCKS[ block.column ][ block.line ] = null;
-            block.moveTo( position, line );
-            BLOCKS[ position ][ line ] = block;
+            moveBlock( block, position, line );
+
             position++;
             }
         }
@@ -229,9 +246,8 @@ for (var line = 0 ; line < G.MAP_LENGTH ; line++)
 
         if ( block !== null )
             {
-            BLOCKS[ block.column ][ block.line ] = null;
-            block.moveTo( position, line );
-            BLOCKS[ position ][ line ] = block;
+            moveBlock( block, position, line );
+
             position--;
             }
         }
@@ -290,9 +306,8 @@ for (var column = 0 ; column < G.MAP_LENGTH ; column++)
 
         if ( block !== null )
             {
-            BLOCKS[ block.column ][ block.line ] = null;
-            block.moveTo( column, position );
-            BLOCKS[ column ][ position ] = block;
+            moveBlock( block, column, position );
+
             position++;
             }
         }
@@ -351,9 +366,8 @@ for (var column = 0 ; column < G.MAP_LENGTH ; column++)
 
         if ( block !== null )
             {
-            BLOCKS[ block.column ][ block.line ] = null;
-            block.moveTo( column, position );
-            BLOCKS[ column ][ position ] = block;
+            moveBlock( block, column, position );
+
             position--;
             }
         }
@@ -362,12 +376,138 @@ for (var column = 0 ; column < G.MAP_LENGTH ; column++)
 
 
 
+function restart()
+{
+var mapLength = G.MAP_LENGTH;
+
+for (var column = 0 ; column < mapLength ; column++)
+    {
+    for (var line = 0 ; line < mapLength ; line++)
+        {
+        var block = BLOCKS[ column ][ line ];
+
+        removeBlock( block );
+        }
+    }
+
+addRandomBlock();
+}
+
+
+
+
+function addBlock( args )
+{
+var block = new Block( args );
+
+BLOCKS[ args.column ][ args.line ] = block;
+}
+
+
 
 function removeBlock( block )
 {
+if ( block !== null )
+    {
+    BLOCKS[ block.column ][ block.line ] = null;
+
+    block.remove();
+    }
+}
+
+
+function moveBlock( block, newColumn, newLine )
+{
 BLOCKS[ block.column ][ block.line ] = null;
 
-block.remove();
+block.moveTo( newColumn, newLine );
+
+BLOCKS[ newColumn ][ newLine ] = block;
+}
+
+
+/*
+    - win:
+        - when there's a block with a 2048 value
+
+     - loose:
+        - no more empty spaces and no adjacent blocks with the same value
+ */
+
+function hasGameEnded()
+{
+var mapLength = G.MAP_LENGTH;
+
+    // check if there's an empty space (if there is, means the game hasn't ended)
+if ( isThereEmptyBlocks() )
+    {
+    return false;
+    }
+
+
+var left, right, up, down;
+
+    // the grid is all filled, need to check if there's adjacent blocks with the same value
+for (var column = 0 ; column < mapLength ; column++)
+    {
+    for (var line = 0 ; line < mapLength ; line++)
+        {
+        var block = BLOCKS[ column ][ line ];
+
+            // check all positions around this one
+        if ( column <= 0 )
+            {
+            left = null;
+            }
+
+        else
+            {
+            left = BLOCKS[ column - 1 ][ line ];
+            }
+
+        if ( column >= mapLength - 1 )
+            {
+            right = null;
+            }
+
+        else
+            {
+            right = BLOCKS[ column + 1 ][ line ];
+            }
+
+        if ( line <= 0 )
+            {
+            up = null;
+            }
+
+        else
+            {
+            up = BLOCKS[ column ][ line - 1 ];
+            }
+
+        if ( line >= mapLength - 1 )
+            {
+            down = null;
+            }
+
+        else
+            {
+            down = BLOCKS[ column ][ line + 1 ];
+            }
+
+
+
+        if ( (left && left.value == block.value) ||
+             (right && right.value == block.value) ||
+             (up && up.value == block.value) ||
+             (down && down.value == block.value) )
+            {
+            return false;
+            }
+        }
+    }
+
+return true;
 }
 
 
@@ -375,29 +515,48 @@ block.remove();
 function keyUpEvents( event )
 {
 var key = event.keyCode;
+var moved = false;
 
 if ( key == EVENT_KEY.leftArrow )
     {
     moveLeft();
-    addRandomBlock();
+    moved = true;
     }
 
 else if ( key == EVENT_KEY.rightArrow )
     {
     moveRight();
-    addRandomBlock();
+    moved = true;
     }
 
 else if ( key == EVENT_KEY.upArrow )
     {
     moveUp();
-    addRandomBlock();
+    moved = true;
     }
 
 else if ( key == EVENT_KEY.downArrow )
     {
     moveDown();
-    addRandomBlock();
+    moved = true;
+    }
+
+
+if ( moved === true )
+    {
+    if ( hasGameEnded() )
+        {
+        console.log( 'Game has ended.' );
+        restart();
+        }
+
+    else
+        {
+        if ( isThereEmptyBlocks() )
+            {
+            addRandomBlock();
+            }
+        }
     }
 }
 
