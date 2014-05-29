@@ -11,8 +11,6 @@ class Block
     valueElement;
     containerElement;
 
-    move: MoveAnimation.Move;
-
     static size = 50;
     static colors = {
         '2': 'rgb(243,243,241)',
@@ -36,8 +34,6 @@ constructor( args )
 
     this.setupShape();
     this.positionIn( this.column, this.line );
-
-    this.move = new MoveAnimation.Move( this.containerElement );
 
     this.value = 0;
     this.setValue( args.value );
@@ -83,7 +79,10 @@ moveTo( column, line )
     this.column = column;
     this.line = line;
 
-    this.move.start( (size + lineSize) * column, (size + lineSize) * line, 100 );
+    var x = (size + lineSize) * column;
+    var y = (size + lineSize) * line;
+
+    createjs.Tween.get( this.containerElement ).to( { x: x, y: y }, 100 );
     }
 
 setValue( value )

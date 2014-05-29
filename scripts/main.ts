@@ -13,11 +13,9 @@
 
     - to doo:
 
-        - use tweenjs for the movement (doesnt really need the move_animation.js stuff (since not cancelling animation in the middle of it))
-        - the end conditions
-            - win when there's a block with 2048 value
         - add control to change the grid size
         - add control with the limits to the values that can spawn (default 2-4, but can be 2-8, 2-16 etc)
+        - add better messages
  */
 
 var G = {

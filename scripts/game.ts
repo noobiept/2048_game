@@ -1,6 +1,5 @@
 /// <reference path='block.ts' />
 /// <reference path='utilities.ts' />
-/// <reference path='move_animation.ts' />
 
 module Game
 {
@@ -23,7 +22,6 @@ for (var column = 0 ; column < mapLength ; column++)
         }
     }
 
-MoveAnimation.init();
 
 var blockSize = Block.size;
 var lineSize = G.GRID_LINE_SIZE;
@@ -426,6 +424,8 @@ BLOCKS[ newColumn ][ newLine ] = block;
 }
 
 
+
+
 /*
     - win:
         - when there's a block with a 2048 value
@@ -438,6 +438,27 @@ function hasGameEnded()
 {
 var mapLength = G.MAP_LENGTH;
 
+var column;
+var line;
+var block;
+
+
+for (column = 0 ; column < mapLength ; column++)
+    {
+    for (line = 0 ; line < mapLength ; line++)
+        {
+        block = BLOCKS[ column ][ line ];
+
+        if ( block && block.value >= 2048 )
+            {
+            console.log( 'Victory!' );
+            return true;
+            }
+        }
+    }
+
+
+
     // check if there's an empty space (if there is, means the game hasn't ended)
 if ( isThereEmptyBlocks() )
     {
@@ -448,11 +469,11 @@ if ( isThereEmptyBlocks() )
 var left, right, up, down;
 
     // the grid is all filled, need to check if there's adjacent blocks with the same value
-for (var column = 0 ; column < mapLength ; column++)
+for (column = 0 ; column < mapLength ; column++)
     {
-    for (var line = 0 ; line < mapLength ; line++)
+    for (line = 0 ; line < mapLength ; line++)
         {
-        var block = BLOCKS[ column ][ line ];
+        block = BLOCKS[ column ][ line ];
 
             // check all positions around this one
         if ( column <= 0 )
@@ -507,6 +528,7 @@ for (var column = 0 ; column < mapLength ; column++)
         }
     }
 
+console.log( 'Defeat!' );
 return true;
 }
 
