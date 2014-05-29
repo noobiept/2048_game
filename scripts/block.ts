@@ -11,7 +11,7 @@ class Block
     valueElement;
     containerElement;
 
-    static size = 50;
+    static size = 70;
     static colors = {
         '2': 'rgb(243,243,241)',
         '4': 'rgb(192,243,241)',
@@ -45,7 +45,14 @@ constructor( args )
 setupShape()
     {
     var background = new createjs.Shape();
-    var value = new createjs.Text( '', '30px monospace' );
+    var textSize = 30;
+    var value = new createjs.Text( '', textSize + 'px monospace' );
+
+    var size = Block.size;
+
+    value.textAlign = 'center';
+    value.x = size / 2;
+    value.y = size / 2 - textSize / 2;
 
     var container = new createjs.Container();
 

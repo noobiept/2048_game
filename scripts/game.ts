@@ -396,27 +396,30 @@ export function setMapLength( length )
 {
 clear();
 
-G.MAP_LENGTH = length;
-
-var mapLength = length;
 var blockSize = Block.size;
 var lineSize = G.GRID_LINE_SIZE;
 
-for (var column = 0 ; column < mapLength ; column++)
+G.MAP_LENGTH = length;
+
+G.CANVAS.width = length * blockSize;
+G.CANVAS.height = length * blockSize;
+
+
+for (var column = 0 ; column < length ; column++)
     {
     BLOCKS[ column ] = [];
 
-    for (var line = 0 ; line < mapLength ; line++)
+    for (var line = 0 ; line < length ; line++)
         {
         BLOCKS[ column ][ line ] = null;
         }
     }
 
 
-for (var a = 1 ; a < mapLength ; a++)
+for (var a = 1 ; a < length ; a++)
     {
     var position = blockSize * a + (a - 1) * lineSize;
-    var lineLength = mapLength * blockSize + (mapLength - 1) * lineSize;
+    var lineLength = length * blockSize + (length - 1) * lineSize;
 
     drawLine( position, 0, lineSize, lineLength );
     drawLine( 0, position, lineLength, lineSize );

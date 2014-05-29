@@ -24,3 +24,13 @@
     {
     margin: 0 10px;
     }
+
+body
+    {
+    text-align: center;
+    }
+
+#Canvas
+    {
+    margin-bottom: 30px;
+    }

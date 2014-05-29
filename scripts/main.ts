@@ -20,11 +20,6 @@
     - when 2 tiles combine, we add the resulting value to the score
     - game is won when a tile with a value of 2048 appears
     - game ends when there's no more possible moves (no empty spaces, and no adjacent tiles with the same value)
-
-    - to doo:
-
-        - center the grid
-        - resize the canvas according to the grid length
  */
 
 var G = {
@@ -40,8 +35,6 @@ window.onload = function()
 G.CANVAS = document.querySelector( '#Canvas' );
 G.STAGE = new createjs.Stage( G.CANVAS );
 
-G.CANVAS.width = 600;
-G.CANVAS.height = 400;
 
 Game.init();
 
