@@ -23,7 +23,6 @@
 
     - to doo:
 
-        - add control with the limits to the values that can spawn (default 2-4, but can be 2-8, 2-16 etc)
         - center the grid
         - resize the canvas according to the grid length
  */
@@ -32,7 +31,8 @@ var G = {
         CANVAS: null,
         STAGE: null,
         MAP_LENGTH: 4,
-        GRID_LINE_SIZE: 2
+        GRID_LINE_SIZE: 2,
+        SPAWN_VALUES: [ 2, 4 ]
     };
 
 window.onload = function()

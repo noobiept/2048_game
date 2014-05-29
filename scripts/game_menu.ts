@@ -48,6 +48,14 @@ $( spawnRange ).slider({
             var max = values[ ui.values[ 1 ] ];
 
             $( spawnRangeLabel ).text( '[ ' + min + ', ' + max + ' ]' );
+            },
+        stop: function( event, ui )
+            {
+            var min = values[ ui.values[ 0 ] ];
+            var max = values[ ui.values[ 1 ] ];
+
+            Game.setSpawnValues( min, max );
+            Game.addRandomBlock();
             }
     });
 }

@@ -54,7 +54,7 @@ var column = blockPosition.column;
 var line = blockPosition.line;
 
     // get the value
-var possibleValues = [ 2, 4 ];
+var possibleValues = G.SPAWN_VALUES;
 
 position = getRandomInt( 0, possibleValues.length - 1 );
 
@@ -423,6 +423,24 @@ for (var a = 1 ; a < mapLength ; a++)
     }
 }
 
+
+
+export function setSpawnValues( min, max )
+{
+clearBlocks();
+
+var value = min;
+var possibleValues = [];
+
+while ( value <= max )
+    {
+    possibleValues.push( value );
+
+    value *= 2;
+    }
+
+G.SPAWN_VALUES = possibleValues;
+}
 
 
 
