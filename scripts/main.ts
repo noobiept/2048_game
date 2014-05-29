@@ -2,6 +2,15 @@
 /// <reference path='game.ts' />
 
 /*
+    - Libraries:
+        - jquery: 2.1
+        - jqueryui: 1.10
+            - dialog
+            - flick theme
+        - easeljs: 0.7
+        - tweenjs: 0.5
+        - underscorejs: 1.6
+
     - 4x4 grids
     - arrows keys to move left/right/up/down
     - if two tiles of the same number collide while moving, they will merge into a tile with the total value of the two
@@ -15,7 +24,6 @@
 
         - add control to change the grid size
         - add control with the limits to the values that can spawn (default 2-4, but can be 2-8, 2-16 etc)
-        - add better messages
  */
 
 var G = {

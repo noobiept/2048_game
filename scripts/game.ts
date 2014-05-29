@@ -36,7 +36,6 @@ for (var a = 1 ; a < mapLength ; a++)
     drawLine( 0, position, length, lineSize );
     }
 
-
 addRandomBlock();
 
 document.body.addEventListener( 'keyup', keyUpEvents );
@@ -430,8 +429,13 @@ BLOCKS[ newColumn ][ newLine ] = block;
     - win:
         - when there's a block with a 2048 value
 
-     - loose:
+    - loose:
         - no more empty spaces and no adjacent blocks with the same value
+
+    - returns:
+        - 0 if game hasn't ended
+        - 1 if ended in victory
+        - -1 if ended in a loss
  */
 
 function hasGameEnded()
@@ -451,8 +455,7 @@ for (column = 0 ; column < mapLength ; column++)
 
         if ( block && block.value >= 2048 )
             {
-            console.log( 'Victory!' );
-            return true;
+            return 1;
             }
         }
     }
@@ -462,7 +465,7 @@ for (column = 0 ; column < mapLength ; column++)
     // check if there's an empty space (if there is, means the game hasn't ended)
 if ( isThereEmptyBlocks() )
     {
-    return false;
+    return 0;
     }
 
 
@@ -523,13 +526,12 @@ for (column = 0 ; column < mapLength ; column++)
              (up && up.value == block.value) ||
              (down && down.value == block.value) )
             {
-            return false;
+            return 0;
             }
         }
     }
 
-console.log( 'Defeat!' );
-return true;
+return -1;
 }
 
 
@@ -566,10 +568,38 @@ else if ( key == EVENT_KEY.downArrow )
 
 if ( moved === true )
     {
-    if ( hasGameEnded() )
+    var gameEnded = hasGameEnded();
+
+    if ( gameEnded !== 0 )
         {
-        console.log( 'Game has ended.' );
-        restart();
+        var message = document.querySelector( '#Message' );
+        var text = 'Game has ended.\n\n';
+
+        if ( gameEnded === 1 )
+            {
+            text += 'Victory!';
+            }
+
+        else
+            {
+            text += 'Defeat!';
+            }
+
+
+        $( message ).text( text );
+        $( message ).dialog({
+                dialogClass: 'no-close',
+                modal: true,
+                buttons: [{
+                    text: 'Ok',
+                    click: function()
+                        {
+                        $( this ).dialog( 'close' );
+
+                        restart();
+                        }
+                }]
+            });
         }
 
     else
