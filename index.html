@@ -11,6 +11,7 @@
 
     <script type="text/javascript" src="scripts/utilities.js"></script>
     <script type="text/javascript" src="scripts/block.js"></script>
+    <script type="text/javascript" src="scripts/game_menu.js"></script>
     <script type="text/javascript" src="scripts/game.js"></script>
     <script type="text/javascript" src="scripts/main.js"></script>
 
@@ -22,6 +23,21 @@
 <body>
 
     <canvas id="Canvas"></canvas>
+
+    <div id="GameMenu">
+        <div class="sliderContainer">
+            <span>Grid length</span>
+            <div id="gridLength"></div>
+            <span id="gridLengthLabel"></span>
+        </div>
+
+        <div class="sliderContainer">
+            <span>Spawn range</span>
+            <div id="spawnRange"></div>
+            <span id="spawnRangeLabel"></span>
+        </div>
+    </div>
+
 
     <div id="Message"></div>
 </body>

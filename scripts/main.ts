@@ -6,6 +6,7 @@
         - jquery: 2.1
         - jqueryui: 1.10
             - dialog
+            - slider
             - flick theme
         - easeljs: 0.7
         - tweenjs: 0.5
@@ -22,8 +23,9 @@
 
     - to doo:
 
-        - add control to change the grid size
         - add control with the limits to the values that can spawn (default 2-4, but can be 2-8, 2-16 etc)
+        - center the grid
+        - resize the canvas according to the grid length
  */
 
 var G = {

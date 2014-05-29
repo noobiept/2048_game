@@ -7,3 +7,20 @@
     {
     display: none;
     }
+
+.ui-slider
+    {
+    width: 200px;
+    display: inline-block;
+    }
+
+
+.sliderContainer
+    {
+    margin: 10px;
+    }
+
+.sliderContainer > *
+    {
+    margin: 0 10px;
+    }

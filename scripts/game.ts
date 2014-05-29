@@ -1,4 +1,5 @@
 /// <reference path='block.ts' />
+/// <reference path='game_menu.ts' />
 /// <reference path='utilities.ts' />
 
 module Game
@@ -10,31 +11,9 @@ var GRID_LINES = [];
 
 export function init()
 {
-var mapLength = G.MAP_LENGTH;
+setMapLength( G.MAP_LENGTH );
 
-for (var column = 0 ; column < mapLength ; column++)
-    {
-    BLOCKS[ column ] = [];
-
-    for (var line = 0 ; line < mapLength ; line++)
-        {
-        BLOCKS[ column ][ line ] = null;
-        }
-    }
-
-
-var blockSize = Block.size;
-var lineSize = G.GRID_LINE_SIZE;
-var mapLength = G.MAP_LENGTH;
-
-for (var a = 1 ; a < mapLength ; a++)
-    {
-    var position = blockSize * a + (a - 1) * lineSize;
-    var length = mapLength * blockSize + (mapLength - 1) * lineSize;
-
-    drawLine( position, 0, lineSize, length );
-    drawLine( 0, position, length, lineSize );
-    }
+GameMenu.init();
 
 addRandomBlock();
 
@@ -373,21 +352,75 @@ for (var column = 0 ; column < G.MAP_LENGTH ; column++)
 
 
 
-function restart()
+export function restart()
 {
-var mapLength = G.MAP_LENGTH;
+clearBlocks();
 
-for (var column = 0 ; column < mapLength ; column++)
+addRandomBlock();
+}
+
+
+function clearBlocks()
+{
+for (var column = 0 ; column < BLOCKS.length ; column++)
     {
-    for (var line = 0 ; line < mapLength ; line++)
+    var columnArray = BLOCKS[ column ];
+
+    for (var line = 0 ; line < columnArray.length ; line++)
         {
         var block = BLOCKS[ column ][ line ];
 
         removeBlock( block );
         }
     }
+}
 
-addRandomBlock();
+
+function clear()
+{
+clearBlocks();
+
+    // clear the grid lines
+for (var a = 0 ; a < GRID_LINES.length ; a++)
+    {
+    G.STAGE.removeChild( GRID_LINES[ a ] );
+    }
+
+GRID_LINES.length = 0;
+BLOCKS.length = 0;
+}
+
+
+
+export function setMapLength( length )
+{
+clear();
+
+G.MAP_LENGTH = length;
+
+var mapLength = length;
+var blockSize = Block.size;
+var lineSize = G.GRID_LINE_SIZE;
+
+for (var column = 0 ; column < mapLength ; column++)
+    {
+    BLOCKS[ column ] = [];
+
+    for (var line = 0 ; line < mapLength ; line++)
+        {
+        BLOCKS[ column ][ line ] = null;
+        }
+    }
+
+
+for (var a = 1 ; a < mapLength ; a++)
+    {
+    var position = blockSize * a + (a - 1) * lineSize;
+    var lineLength = mapLength * blockSize + (mapLength - 1) * lineSize;
+
+    drawLine( position, 0, lineSize, lineLength );
+    drawLine( 0, position, lineLength, lineSize );
+    }
 }
 
 
