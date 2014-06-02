@@ -1,0 +1,10 @@
+{
+    "resultingFolder": "2048_game",
+    "basePath": "..",
+    "files":
+        [
+            "css/",
+            "libraries/",
+            "manifest.json"
+        ]
+}
