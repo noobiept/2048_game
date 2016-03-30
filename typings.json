@@ -1,0 +1,10 @@
+{
+  "ambientDependencies": {
+    "createjs": "registry:dt/createjs#0.7.1+20140414154755",
+    "createjs-lib": "registry:dt/createjs-lib#0.7.1+20140414154755",
+    "easeljs": "registry:dt/easeljs#0.8.0+20160326124359",
+    "jquery": "registry:dt/jquery#1.10.0+20160316155526",
+    "jqueryui": "registry:dt/jqueryui#1.9.0+20160317120654",
+    "tweenjs": "registry:dt/tweenjs#0.6.0+20160317120654"
+  }
+}

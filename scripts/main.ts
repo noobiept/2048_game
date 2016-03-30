@@ -1,17 +1,7 @@
-/// <reference path='../typings/tsd.d.ts' />
+/// <reference path='../typings/browser.d.ts' />
 /// <reference path='game.ts' />
 
 /*
-    - Libraries:
-        - jquery: 2.1
-        - jqueryui: 1.10
-            - dialog
-            - slider
-            - flick theme
-        - easeljs: 0.7
-        - tweenjs: 0.5
-        - underscorejs: 1.6
-
     - 4x4 grids
     - arrows keys to move left/right/up/down
     - if two tiles of the same number collide while moving, they will merge into a tile with the total value of the two

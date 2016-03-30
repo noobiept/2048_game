@@ -1,4 +1,3 @@
-/// <reference path='../typings/tsd.d.ts' />
 /// <reference path='main.ts' />
 
 class Block
