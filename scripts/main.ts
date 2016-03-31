@@ -12,7 +12,15 @@
     - game ends when there's no more possible moves (no empty spaces, and no adjacent tiles with the same value)
  */
 
-var G = {
+interface Global {
+    CANVAS: HTMLCanvasElement;
+    STAGE: createjs.Stage;
+    MAP_LENGTH: number;
+    GRID_LINE_SIZE: number;
+    SPAWN_VALUES: number[];
+}
+
+var G: Global = {
         CANVAS: null,
         STAGE: null,
         MAP_LENGTH: 4,
@@ -22,15 +30,14 @@ var G = {
 
 window.onload = function()
 {
-G.CANVAS = document.querySelector( '#Canvas' );
+G.CANVAS = <HTMLCanvasElement> document.querySelector( '#Canvas' );
 G.STAGE = new createjs.Stage( G.CANVAS );
-
+createjs.Ticker.timingMode = createjs.Ticker.RAF;
 
 Game.init();
 
 createjs.Ticker.on( 'tick', tick );
 };
-
 
 
 function tick( event )

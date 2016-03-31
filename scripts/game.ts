@@ -5,7 +5,6 @@
 module Game
 {
 var BLOCKS = [];
-
 var GRID_LINES = [];
 
 
@@ -37,8 +36,6 @@ G.STAGE.addChild( line );
 }
 
 
-
-
 export function addRandomBlock()
 {
 var emptyBlocks = getEmptyBlocks();
@@ -66,8 +63,6 @@ addBlock({
         value: value
     });
 }
-
-
 
 
 function getEmptyBlocks()
@@ -231,7 +226,6 @@ for (var line = 0 ; line < G.MAP_LENGTH ; line++)
 }
 
 
-
 function moveUp()
 {
     // combine
@@ -289,7 +283,6 @@ for (var column = 0 ; column < G.MAP_LENGTH ; column++)
         }
     }
 }
-
 
 
 function moveDown()
@@ -351,7 +344,6 @@ for (var column = 0 ; column < G.MAP_LENGTH ; column++)
 }
 
 
-
 export function restart()
 {
 clearBlocks();
@@ -391,7 +383,6 @@ BLOCKS.length = 0;
 }
 
 
-
 export function setMapLength( length )
 {
 clear();
@@ -401,8 +392,9 @@ var lineSize = G.GRID_LINE_SIZE;
 
 G.MAP_LENGTH = length;
 
-G.CANVAS.width = length * blockSize;
-G.CANVAS.height = length * blockSize;
+var size = length * blockSize + (length - 1) * lineSize;
+G.CANVAS.width = size;
+G.CANVAS.height = size;
 
 
 for (var column = 0 ; column < length ; column++)
@@ -427,7 +419,6 @@ for (var a = 1 ; a < length ; a++)
 }
 
 
-
 export function setSpawnValues( min, max )
 {
 clearBlocks();
@@ -446,14 +437,12 @@ G.SPAWN_VALUES = possibleValues;
 }
 
 
-
 function addBlock( args )
 {
 var block = new Block( args );
 
 BLOCKS[ args.column ][ args.line ] = block;
 }
-
 
 
 function removeBlock( block )
@@ -477,8 +466,6 @@ BLOCKS[ newColumn ][ newLine ] = block;
 }
 
 
-
-
 /*
     - win:
         - when there's a block with a 2048 value
@@ -491,7 +478,6 @@ BLOCKS[ newColumn ][ newLine ] = block;
         - 1 if ended in victory
         - -1 if ended in a loss
  */
-
 function hasGameEnded()
 {
 var mapLength = G.MAP_LENGTH;
@@ -499,7 +485,6 @@ var mapLength = G.MAP_LENGTH;
 var column;
 var line;
 var block;
-
 
 for (column = 0 ; column < mapLength ; column++)
     {
@@ -515,13 +500,11 @@ for (column = 0 ; column < mapLength ; column++)
     }
 
 
-
     // check if there's an empty space (if there is, means the game hasn't ended)
 if ( isThereEmptyBlocks() )
     {
     return 0;
     }
-
 
 var left, right, up, down;
 
@@ -587,7 +570,6 @@ for (column = 0 ; column < mapLength ; column++)
 
 return -1;
 }
-
 
 
 function keyUpEvents( event )
@@ -665,7 +647,5 @@ if ( moved === true )
         }
     }
 }
-
-
 
 }
