@@ -577,28 +577,31 @@ function keyUpEvents( event )
 var key = event.keyCode;
 var moved = false;
 
-if ( key == EVENT_KEY.leftArrow )
+switch( key )
     {
-    moveLeft();
-    moved = true;
-    }
+    case EVENT_KEY.leftArrow:
+    case EVENT_KEY.a:
+        moveLeft();
+        moved = true;
+        break;
 
-else if ( key == EVENT_KEY.rightArrow )
-    {
-    moveRight();
-    moved = true;
-    }
+    case EVENT_KEY.rightArrow:
+    case EVENT_KEY.d:
+        moveRight();
+        moved = true;
+        break;
 
-else if ( key == EVENT_KEY.upArrow )
-    {
-    moveUp();
-    moved = true;
-    }
+    case EVENT_KEY.upArrow:
+    case EVENT_KEY.w:
+        moveUp();
+        moved = true;
+        break;
 
-else if ( key == EVENT_KEY.downArrow )
-    {
-    moveDown();
-    moved = true;
+    case EVENT_KEY.downArrow:
+    case EVENT_KEY.s:
+        moveDown();
+        moved = true;
+        break;
     }
 
 
