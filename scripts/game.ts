@@ -27,7 +27,7 @@ var line = new createjs.Shape();
 var g = line.graphics;
 
 g.beginFill( 'rgb(170,170,170)' );
-g.drawRoundRect( x, y, width, height, 5 );
+g.drawRect( x, y, width, height );
 g.endFill();
 
 GRID_LINES.push( line );
