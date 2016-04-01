@@ -5,7 +5,7 @@ export function init()
 var gridLength = document.querySelector( '#gridLength' );
 var gridLengthLabel = document.querySelector( '#gridLengthLabel' );
 
-var length = G.MAP_LENGTH;
+var length = Data.getOption( 'gridLength' );
 
 $( gridLengthLabel ).text( length );
 
@@ -21,6 +21,7 @@ $( gridLength ).slider({
 
         stop: function( event, ui )
             {
+            Data.setOption( 'gridLength', ui.value );
             Game.setMapLength( ui.value );
             Game.addRandomBlock();
             }
@@ -30,8 +31,9 @@ $( gridLength ).slider({
 var spawnRange = document.querySelector( '#spawnRange' );
 var spawnRangeLabel = document.querySelector( '#spawnRangeLabel' );
 
-var min = 2;
-var max = 4;
+var range = Data.getOption( 'spawnRange' );
+var min = range[ 0 ];
+var max = range[ 1 ];
 
 var values = [ 2, 4, 8, 16, 32 ];
 
@@ -54,6 +56,7 @@ $( spawnRange ).slider({
             var min = values[ ui.values[ 0 ] ];
             var max = values[ ui.values[ 1 ] ];
 
+            Data.setOption( 'spawnRange', [ min, max ] );
             Game.setSpawnValues( min, max );
             Game.addRandomBlock();
             }

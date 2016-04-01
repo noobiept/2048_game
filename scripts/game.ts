@@ -10,10 +10,9 @@ var GRID_LINES = [];
 
 export function init()
 {
-setMapLength( G.MAP_LENGTH );
+setMapLength( Data.getOption( 'gridLength' ) );
 
 GameMenu.init();
-
 addRandomBlock();
 
 document.body.addEventListener( 'keyup', keyUpEvents );
@@ -51,7 +50,7 @@ var column = blockPosition.column;
 var line = blockPosition.line;
 
     // get the value
-var possibleValues = G.SPAWN_VALUES;
+var possibleValues = Data.getOption( 'spawnRange' );
 
 position = getRandomInt( 0, possibleValues.length - 1 );
 
@@ -68,10 +67,11 @@ addBlock({
 function getEmptyBlocks()
 {
 var emptyBlocks = [];
+var gridLength = Data.getOption( 'gridLength' );
 
-for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+for (var column = 0 ; column < gridLength ; column++)
     {
-    for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+    for (var line = 0 ; line < gridLength ; line++)
         {
         if ( BLOCKS[ column ][ line ] === null )
             {
@@ -89,7 +89,7 @@ return emptyBlocks;
 
 function isThereEmptyBlocks()
 {
-var mapLength = G.MAP_LENGTH;
+var mapLength = Data.getOption( 'gridLength' );
 
 for (var column = 0 ; column < mapLength ; column++)
     {
@@ -110,12 +110,14 @@ return false;
 
 function moveLeft()
 {
+var gridLength = Data.getOption( 'gridLength' );
+
     // combine
-for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+for (var line = 0 ; line < gridLength ; line++)
     {
     var firstBlock = null;
 
-    for (var column = G.MAP_LENGTH - 1 ; column >= 0 ; column--)
+    for (var column = gridLength - 1 ; column >= 0 ; column--)
         {
         var block = BLOCKS[ column ][ line ];
 
@@ -148,11 +150,11 @@ for (var line = 0 ; line < G.MAP_LENGTH ; line++)
 
     // count and move
     // loop in the opposite direction
-for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+for (var line = 0 ; line < gridLength ; line++)
     {
     var position = 0;
 
-    for (var column = position ; column < G.MAP_LENGTH ; column++)
+    for (var column = position ; column < gridLength ; column++)
         {
         var block = BLOCKS[ column ][ line ];
 
@@ -169,12 +171,14 @@ for (var line = 0 ; line < G.MAP_LENGTH ; line++)
 
 function moveRight()
 {
+var gridLength = Data.getOption( 'gridLength' );
+
     // combine
-for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+for (var line = 0 ; line < gridLength ; line++)
     {
     var firstBlock = null;
 
-    for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+    for (var column = 0 ; column < gridLength ; column++)
         {
         var block = BLOCKS[ column ][ line ];
 
@@ -207,9 +211,9 @@ for (var line = 0 ; line < G.MAP_LENGTH ; line++)
 
     // count and move
     // loop in the opposite direction
-for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+for (var line = 0 ; line < gridLength ; line++)
     {
-    var position = G.MAP_LENGTH - 1;
+    var position = gridLength - 1;
 
     for (var column = position ; column >= 0 ; column--)
         {
@@ -228,12 +232,14 @@ for (var line = 0 ; line < G.MAP_LENGTH ; line++)
 
 function moveUp()
 {
+var gridLength = Data.getOption( 'gridLength' );
+
     // combine
-for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+for (var column = 0 ; column < gridLength ; column++)
     {
     var firstBlock = null;
 
-    for (var line = G.MAP_LENGTH - 1 ; line >= 0 ; line--)
+    for (var line = gridLength - 1 ; line >= 0 ; line--)
         {
         var block = BLOCKS[ column ][ line ];
 
@@ -266,11 +272,11 @@ for (var column = 0 ; column < G.MAP_LENGTH ; column++)
 
     // count and move
     // loop in the opposite direction
-for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+for (var column = 0 ; column < gridLength ; column++)
     {
     var position = 0;
 
-    for (var line = position ; line < G.MAP_LENGTH ; line++)
+    for (var line = position ; line < gridLength ; line++)
         {
         var block = BLOCKS[ column ][ line ];
 
@@ -287,12 +293,14 @@ for (var column = 0 ; column < G.MAP_LENGTH ; column++)
 
 function moveDown()
 {
+var gridLength = Data.getOption( 'gridLength' );
+
     // combine
-for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+for (var column = 0 ; column < gridLength ; column++)
     {
     var firstBlock = null;
 
-    for (var line = 0 ; line < G.MAP_LENGTH ; line++)
+    for (var line = 0 ; line < gridLength ; line++)
         {
         var block = BLOCKS[ column ][ line ];
 
@@ -325,9 +333,9 @@ for (var column = 0 ; column < G.MAP_LENGTH ; column++)
 
     // count and move
     // loop in the opposite direction
-for (var column = 0 ; column < G.MAP_LENGTH ; column++)
+for (var column = 0 ; column < gridLength ; column++)
     {
-    var position = G.MAP_LENGTH - 1;
+    var position = gridLength - 1;
 
     for (var line = position ; line >= 0 ; line--)
         {
@@ -383,14 +391,12 @@ BLOCKS.length = 0;
 }
 
 
-export function setMapLength( length )
+export function setMapLength( length: number )
 {
 clear();
 
 var blockSize = Block.size;
 var lineSize = G.GRID_LINE_SIZE;
-
-G.MAP_LENGTH = length;
 
 var size = length * blockSize + (length - 1) * lineSize;
 G.CANVAS.width = size;
@@ -432,8 +438,6 @@ while ( value <= max )
 
     value *= 2;
     }
-
-G.SPAWN_VALUES = possibleValues;
 }
 
 
@@ -480,7 +484,7 @@ BLOCKS[ newColumn ][ newLine ] = block;
  */
 function hasGameEnded()
 {
-var mapLength = G.MAP_LENGTH;
+var mapLength = Data.getOption( 'gridLength' );
 
 var column;
 var line;
