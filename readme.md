@@ -12,15 +12,21 @@ Description
 - Game is won when a tile with a value of 2048 appears.
 - Game ends when there's no more possible moves (no empty spaces, and no adjacent tiles with the same value).
 
+Controls
+========
+
+Use the `arrow` keys or the `wasd` keys.
+
 Libraries
 =========
 
-- typescript: 1.8
+- typescript: `1.8`
 - createjs
-    - easelJS: 0.8
-    - tweenJS: 0.6
-- jquery: 2.2
-- jqueryUI: 1.11
+    - easelJS: `0.8`
+    - tweenJS: `0.6`
+- jquery: `2.2`
+- jqueryUI: `1.11`
+    - button
     - dialog
     - slider
     - flick theme

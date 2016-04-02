@@ -61,7 +61,8 @@ $( spawnRange ).slider({
             Game.addRandomBlock();
             }
     });
-}
 
+$( '#DonateButton' ).button();
+}
 
 }
