@@ -1,7 +1,8 @@
 {
     "exclude": [
         "release",
-        "typings"
+        "typings",
+        "build"
     ],
     "compilerOptions": {
         "target": "es5"
