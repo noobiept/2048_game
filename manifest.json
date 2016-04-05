@@ -1,7 +1,7 @@
 {
     "name": "2048 game",
     "description": "A sliding block puzzle game.",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "app": { "background": { "scripts": [ "background.js" ] } },
     "icons": { "128": "images/icon128.png" },
     "manifest_version": 2,
