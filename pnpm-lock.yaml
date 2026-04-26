@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@drk4/game-engine':
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -16,6 +20,12 @@ importers:
         version: 6.4.2
 
 packages:
+
+  '@drk4/game-engine@2.0.0':
+    resolution: {integrity: sha512-eSW7fWkEeR8Eb7zC+6SW/pGuT0tGyw4gCQCsdGlAqCf/vXSecdlk7FGaB04PGZKA4mRsLZJHUuk4JdU7cxR6JQ==}
+
+  '@drk4/utilities@6.3.2':
+    resolution: {integrity: sha512-CUtw+8/9A7U8mBBSStluZRnzRn4AacNLxW2qw1VlQBZWIgKLNPX3RoB+AKv0a6EmbhoH5sso28bs6b25Chjesw==}
 
   '@esbuild/aix-ppc64@0.25.12':
     resolution: {integrity: sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA==}
@@ -408,6 +418,12 @@ packages:
         optional: true
 
 snapshots:
+
+  '@drk4/game-engine@2.0.0':
+    dependencies:
+      '@drk4/utilities': 6.3.2
+
+  '@drk4/utilities@6.3.2': {}
 
   '@esbuild/aix-ppc64@0.25.12':
     optional: true

@@ -1,7 +1,8 @@
+import * as Engine from '@drk4/game-engine';
 import { Block } from './block';
 import * as GameMenu from './game_menu';
 import * as Data from './data';
-import { G } from './globals';
+import { GRID_LINE_SIZE } from './globals';
 import { getRandomInt, EVENT_KEY } from './utilities';
 
 var BLOCKS = [];
@@ -21,17 +22,18 @@ document.body.addEventListener( 'keyup', keyUpEvents );
 
 function drawLine( x, y, width, height )
 {
-var line = new createjs.Shape();
-
-var g = line.graphics;
-
-g.beginFill( 'rgb(170,170,170)' );
-g.drawRect( x, y, width, height );
-g.endFill();
+var line = new Engine.Rectangle({
+        x: x + width / 2,
+        y: y + height / 2,
+        width: width,
+        height: height,
+        color: 'rgb(170,170,170)',
+        fill: true
+    });
 
 GRID_LINES.push( line );
 
-G.STAGE.addChild( line );
+Engine.getCanvas().addChild( line );
 }
 
 
@@ -383,7 +385,7 @@ clearBlocks();
     // clear the grid lines
 for (var a = 0 ; a < GRID_LINES.length ; a++)
     {
-    G.STAGE.removeChild( GRID_LINES[ a ] );
+    Engine.getCanvas().removeChild( GRID_LINES[ a ] );
     }
 
 GRID_LINES.length = 0;
@@ -396,11 +398,10 @@ export function setMapLength( length: number )
 clear();
 
 var blockSize = Block.size;
-var lineSize = G.GRID_LINE_SIZE;
+var lineSize = GRID_LINE_SIZE;
 
 var size = length * blockSize + (length - 1) * lineSize;
-G.CANVAS.width = size;
-G.CANVAS.height = size;
+Engine.getCanvas().updateDimensions( size, size );
 
 
 for (var column = 0 ; column < length ; column++)

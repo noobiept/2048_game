@@ -1,4 +1,5 @@
-import { G } from './globals';
+import * as Engine from '@drk4/game-engine';
+import { GRID_LINE_SIZE } from './globals';
 
 export class Block
 {
@@ -6,9 +7,9 @@ export class Block
     column: number;
     line: number;
 
-    backgroundElement;
-    valueElement;
-    containerElement;
+    backgroundElement: Engine.Rectangle;
+    valueElement: Engine.Text;
+    containerElement: Engine.Container;
 
     static size = 70;
     static colors = {
@@ -37,28 +38,42 @@ constructor( args )
     this.value = 0;
     this.setValue( args.value );
 
-    this.containerElement.alpha = 0;
-    createjs.Tween.get( this.containerElement).to( { alpha: 1 }, 500 );
+    this.containerElement.opacity = 0;
+    new Engine.Tween( this.containerElement ).to( { opacity: 1 }, 0.5 ).start();
     }
 
 setupShape()
     {
-    var background = new createjs.Shape();
-    var textSize = 30;
-    var value = new createjs.Text( '', textSize + 'px monospace' );
-
     var size = Block.size;
+    var textSize = 30;
 
-    value.textAlign = 'center';
-    value.x = size / 2;
-    value.y = size / 2 - textSize / 2;
+    var background = new Engine.Rectangle({
+            x: 0,
+            y: 0,
+            width: size,
+            height: size,
+            color: Block.colors[ '2' ],
+            fill: true
+        });
 
-    var container = new createjs.Container();
+    var value = new Engine.Text({
+            x: 0,
+            y: 0,
+            text: '',
+            fontSize: textSize,
+            fontFamily: 'monospace',
+            textAlign: 'center',
+            textBaseline: 'middle',
+            color: 'black',
+            fill: true
+        });
+
+    var container = new Engine.Container();
 
     container.addChild( background );
     container.addChild( value );
 
-    G.STAGE.addChild( container );
+    Engine.getCanvas().addChild( container );
 
     this.backgroundElement = background;
     this.valueElement = value;
@@ -68,54 +83,49 @@ setupShape()
 positionIn( column, line )
     {
     var size = Block.size;
-    var lineSize = G.GRID_LINE_SIZE;
+    var lineSize = GRID_LINE_SIZE;
 
     this.column = column;
     this.line = line;
 
-    this.containerElement.x = (size + lineSize) * column;
-    this.containerElement.y = (size + lineSize) * line;
+    this.containerElement.x = (size + lineSize) * column + size / 2;
+    this.containerElement.y = (size + lineSize) * line + size / 2;
     }
 
 moveTo( column, line )
     {
     var size = Block.size;
-    var lineSize = G.GRID_LINE_SIZE;
+    var lineSize = GRID_LINE_SIZE;
 
     this.column = column;
     this.line = line;
 
-    var x = (size + lineSize) * column;
-    var y = (size + lineSize) * line;
+    var x = (size + lineSize) * column + size / 2;
+    var y = (size + lineSize) * line + size / 2;
 
-    createjs.Tween.get( this.containerElement ).to( { x: x, y: y }, 100 );
+    new Engine.Tween( this.containerElement ).to( { x: x, y: y }, 0.1 ).start();
     }
 
 setValue( value )
     {
     this.value = value;
-    this.valueElement.text = value;
+    this.valueElement.text = String( value );
 
     this.setBackgroundColor( Block.colors[ value.toString() ] )
     }
 
 setBackgroundColor( color )
     {
-    var g = this.backgroundElement.graphics;
-
-    g.clear();
-    g.beginFill( color );
-    g.drawRect( 0, 0, Block.size, Block.size );
-    g.endFill();
+    this.backgroundElement.color = color;
     }
 
 remove()
     {
     var _this = this;
 
-    createjs.Tween.get( this.containerElement ).to( { alpha: 0 }, 200 ).call( function()
+    new Engine.Tween( this.containerElement ).to( { opacity: 0 }, 0.2 ).call( function()
         {
-        G.STAGE.removeChild( _this.containerElement );
-        });
+        _this.containerElement.remove();
+        }).start();
     }
 }

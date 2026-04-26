@@ -12,5 +12,8 @@
   "devDependencies": {
     "typescript": "^6.0.3",
     "vite": "^6.3.3"
+  },
+  "dependencies": {
+    "@drk4/game-engine": "^2.0.0"
   }
 }
