@@ -1,8 +1,3 @@
-interface Window { chrome: any; };
-
-
-module AppStorage
-{
 /**
  * Calls the `callback` with a dictionary that has all the requested keys/values from `localStorage`.
  */
@@ -137,4 +132,3 @@ export function removeData( items: string[], callback?: () => any )
         remove_localStorage( items, callback );
         }
     }
-}

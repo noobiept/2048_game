@@ -1,5 +1,5 @@
-module Data
-{
+import * as AppStorage from './app_storage';
+
 interface OptionsData {
     gridLength: number;
     spawnRange: number[];
@@ -35,7 +35,9 @@ export function setOption( key: OptionsKey, value: any )
     }
 
 
-export function getOption( key: OptionsKey )
+export function getOption( key: 'gridLength' ): number;
+export function getOption( key: 'spawnRange' ): number[];
+export function getOption( key: OptionsKey ): number | number[]
     {
     return OPTIONS[ key ];
     }
@@ -45,4 +47,3 @@ function saveOptions()
     {
     AppStorage.setData({ '2048_options': OPTIONS });
     }
-}

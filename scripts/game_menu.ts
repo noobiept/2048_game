@@ -1,5 +1,6 @@
-module GameMenu
-{
+import * as Data from './data';
+import * as Game from './game';
+
 export function init()
 {
 var gridLength = document.querySelector( '#gridLength' );
@@ -63,6 +64,4 @@ $( spawnRange ).slider({
     });
 
 $( '#DonateButton' ).button();
-}
-
 }

@@ -1,17 +1,6 @@
-/// <reference path='../typings/browser.d.ts' />
-/// <reference path='game.ts' />
-
-interface Global {
-    CANVAS: HTMLCanvasElement;
-    STAGE: createjs.Stage;
-    GRID_LINE_SIZE: number;
-}
-
-var G: Global = {
-        CANVAS: null,
-        STAGE: null,
-        GRID_LINE_SIZE: 2
-    };
+import * as Data from './data';
+import * as Game from './game';
+import { G } from './globals';
 
 
 window.onload = function()

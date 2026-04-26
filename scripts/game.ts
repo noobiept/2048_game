@@ -1,9 +1,9 @@
-/// <reference path='block.ts' />
-/// <reference path='game_menu.ts' />
-/// <reference path='utilities.ts' />
+import { Block } from './block';
+import * as GameMenu from './game_menu';
+import * as Data from './data';
+import { G } from './globals';
+import { getRandomInt, EVENT_KEY } from './utilities';
 
-module Game
-{
 var BLOCKS = [];
 var GRID_LINES = [];
 
@@ -653,6 +653,4 @@ if ( moved === true )
             }
         }
     }
-}
-
 }

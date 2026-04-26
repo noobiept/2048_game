@@ -1,6 +1,6 @@
-/// <reference path='main.ts' />
+import { G } from './globals';
 
-class Block
+export class Block
 {
     value: number;
     column: number;

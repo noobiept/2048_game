@@ -1,0 +1,5 @@
+release
+.DS_Store
+info.txt
+node_modules
+dist

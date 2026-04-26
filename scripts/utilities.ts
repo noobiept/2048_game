@@ -1,17 +1,17 @@
-function getRandomInt( min, max )
+export function getRandomInt( min, max )
 {
 return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 
-function getRandomFloat( min, max )
+export function getRandomFloat( min, max )
 {
 return Math.random() * (max - min) + min;
 }
 
 
 
-var EVENT_KEY = {
+export const EVENT_KEY = {
 
     backspace  : 8,
     tab        : 9,
