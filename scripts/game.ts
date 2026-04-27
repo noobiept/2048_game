@@ -616,34 +616,21 @@ if ( moved === true )
 
     if ( gameEnded !== 0 )
         {
-        var message = document.querySelector( '#Message' );
-        var text = 'Game has ended.\n\n';
+        var title = 'Game over';
 
         if ( gameEnded === 1 )
             {
-            text += 'Victory!';
-            }
-
-        else
-            {
-            text += 'Defeat!';
+            title = 'Victory!';
             }
 
 
-        $( message ).text( text );
-        $( message ).dialog({
-                dialogClass: 'no-close',
-                modal: true,
-                buttons: [{
-                    text: 'Ok',
-                    click: function()
-                        {
-                        $( this ).dialog( 'close' );
-
-                        restart();
-                        }
-                }]
+        var dialog = new Engine.Utilities.Dialog({
+                title: title,
+                body: createMessageBody( 'Starting a new round.' ),
+                onClose: restart
             });
+
+        dialog.open();
         }
 
     else
@@ -654,4 +641,14 @@ if ( moved === true )
             }
         }
     }
+}
+
+
+function createMessageBody( text: string )
+{
+var body = document.createElement( 'div' );
+body.textContent = text;
+body.className = 'GameOverMessage';
+
+return body;
 }

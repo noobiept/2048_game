@@ -1,11 +1,9 @@
 {
   "exclude": [
     "release",
-    "typings",
     "build",
     "dist",
     "node_modules",
-    "public"
   ],
   "compilerOptions": {
     "target": "ES2020",
@@ -20,8 +18,5 @@
   },
   "include": [
     "scripts/**/*.ts"
-  ],
-  "files": [
-    "scripts/globals.d.ts"
   ]
 }

@@ -3,12 +3,7 @@
 <head>
     <title>2048 game</title>
 
-    <script type="text/javascript" src="libraries/jquery-2.2.4.min.js"></script>
-    <script type="text/javascript" src="libraries/jqueryui-1.11/jquery-ui.min.js"></script>
-
     <script type="module" src="/scripts/main.ts"></script>
-
-    <link rel="stylesheet" href="libraries/jqueryui-1.11/jquery-ui.min.css" />
 
     <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -19,21 +14,20 @@
     <div id="GameMenu">
         <div class="sliderContainer">
             <span>Grid length</span>
-            <div id="gridLength"></div>
+            <input type="range" id="gridLength" min="4" max="10" step="1" />
             <span id="gridLengthLabel"></span>
         </div>
 
         <div class="sliderContainer">
             <span>Spawn range</span>
-            <div id="spawnRange"></div>
+            <div class="dualRange">
+                <div class="dualRange-track"></div>
+                <div class="dualRange-fill" id="spawnRangeFill"></div>
+                <input type="range" id="spawnRangeMin" min="0" max="4" step="1" />
+                <input type="range" id="spawnRangeMax" min="0" max="4" step="1" />
+            </div>
             <span id="spawnRangeLabel"></span>
         </div>
-
-        <div>
-            <a id="DonateButton" href="http://nbpt.eu/donate/" target="_blank">Donate</a>
-        </div>
     </div>
-
-    <div id="Message"></div>
 </body>
 </html>

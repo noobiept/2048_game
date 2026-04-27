@@ -1,3 +1,10 @@
+declare global {
+    interface Window {
+        chrome: any;
+    }
+}
+
+
 /**
  * Calls the `callback` with a dictionary that has all the requested keys/values from `localStorage`.
  */

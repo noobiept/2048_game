@@ -4,6 +4,3 @@
 *.jpg binary
 *.gif binary
 *.ico binary
-
-libraries/** -text
-public/libraries/** -text

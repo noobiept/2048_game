@@ -3,65 +3,89 @@ import * as Game from './game';
 
 export function init()
 {
-var gridLength = document.querySelector( '#gridLength' );
-var gridLengthLabel = document.querySelector( '#gridLengthLabel' );
+initGridLength();
+initSpawnRange();
+}
 
-var length = Data.getOption( 'gridLength' );
 
-$( gridLengthLabel ).text( length );
+function initGridLength()
+{
+const input = document.querySelector<HTMLInputElement>( '#gridLength' )!;
+const label = document.querySelector<HTMLElement>( '#gridLengthLabel' )!;
 
-$( gridLength ).slider({
-        range: 'min',
-        value: length,
-        min: 4,
-        max: 10,
-        slide: function( event, ui )
-            {
-            $( gridLengthLabel ).text( ui.value );
-            },
+const length = Data.getOption( 'gridLength' );
+input.value = String( length );
+label.textContent = String( length );
 
-        stop: function( event, ui )
-            {
-            Data.setOption( 'gridLength', ui.value );
-            Game.setMapLength( ui.value );
-            Game.addRandomBlock();
-            }
+input.addEventListener( 'input', () =>
+    {
+    label.textContent = input.value;
     });
 
+input.addEventListener( 'change', () =>
+    {
+    const value = Number( input.value );
+    Data.setOption( 'gridLength', value );
+    Game.setMapLength( value );
+    Game.addRandomBlock();
+    });
+}
 
-var spawnRange = document.querySelector( '#spawnRange' );
-var spawnRangeLabel = document.querySelector( '#spawnRangeLabel' );
 
-var range = Data.getOption( 'spawnRange' );
-var min = range[ 0 ];
-var max = range[ 1 ];
+function initSpawnRange()
+{
+const minInput = document.querySelector<HTMLInputElement>( '#spawnRangeMin' )!;
+const maxInput = document.querySelector<HTMLInputElement>( '#spawnRangeMax' )!;
+const fill = document.querySelector<HTMLElement>( '#spawnRangeFill' )!;
+const label = document.querySelector<HTMLElement>( '#spawnRangeLabel' )!;
 
-var values = [ 2, 4, 8, 16, 32 ];
+const values = [ 2, 4, 8, 16, 32 ];
+const range = Data.getOption( 'spawnRange' );
+const trackMin = Number( minInput.min );
+const trackMax = Number( minInput.max );
+const trackSpan = trackMax - trackMin;
 
-$( spawnRangeLabel ).text( '[ ' + min + ', ' + max + ' ]' );
+minInput.value = String( values.indexOf( range[ 0 ] ) );
+maxInput.value = String( values.indexOf( range[ 1 ] ) );
 
-$( spawnRange ).slider({
-        range: true,
-        min: 0,
-        max: values.length  - 1,
-        values: [ values.indexOf( min ), values.indexOf( max ) ],
-        slide: function( event, ui )
-            {
-            var min = values[ ui.values[ 0 ] ];
-            var max = values[ ui.values[ 1 ] ];
+const updateUi = () =>
+    {
+    const minIdx = Number( minInput.value );
+    const maxIdx = Number( maxInput.value );
+    label.textContent = '[ ' + values[ minIdx ] + ', ' + values[ maxIdx ] + ' ]';
+    fill.style.left = ( ( minIdx - trackMin ) / trackSpan * 100 ) + '%';
+    fill.style.right = ( ( trackMax - maxIdx ) / trackSpan * 100 ) + '%';
+    };
 
-            $( spawnRangeLabel ).text( '[ ' + min + ', ' + max + ' ]' );
-            },
-        stop: function( event, ui )
-            {
-            var min = values[ ui.values[ 0 ] ];
-            var max = values[ ui.values[ 1 ] ];
+const commit = () =>
+    {
+    const min = values[ Number( minInput.value ) ];
+    const max = values[ Number( maxInput.value ) ];
+    Data.setOption( 'spawnRange', [ min, max ] );
+    Game.setSpawnValues( min, max );
+    Game.addRandomBlock();
+    };
 
-            Data.setOption( 'spawnRange', [ min, max ] );
-            Game.setSpawnValues( min, max );
-            Game.addRandomBlock();
-            }
+minInput.addEventListener( 'input', () =>
+    {
+    if ( Number( minInput.value ) > Number( maxInput.value ) )
+        {
+        maxInput.value = minInput.value;
+        }
+    updateUi();
     });
 
-$( '#DonateButton' ).button();
+maxInput.addEventListener( 'input', () =>
+    {
+    if ( Number( maxInput.value ) < Number( minInput.value ) )
+        {
+        minInput.value = maxInput.value;
+        }
+    updateUi();
+    });
+
+minInput.addEventListener( 'change', commit );
+maxInput.addEventListener( 'change', commit );
+
+updateUi();
 }
