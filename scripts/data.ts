@@ -1,4 +1,4 @@
-import * as AppStorage from './app_storage';
+import * as Engine from '@drk4/game-engine';
 
 interface OptionsData {
     gridLength: number;
@@ -12,15 +12,13 @@ var OPTIONS: OptionsData = {
 };
 
 export function load(callback: () => any) {
-    AppStorage.getData(['2048_options'], function (data) {
-        var options = data['2048_options'];
+    var options = Engine.Utilities.getObject('2048_options');
 
-        if (options) {
-            OPTIONS = options;
-        }
+    if (options) {
+        OPTIONS = options;
+    }
 
-        callback();
-    });
+    callback();
 }
 
 export function setOption(key: OptionsKey, value: any) {
@@ -35,5 +33,5 @@ export function getOption(key: OptionsKey): number | number[] {
 }
 
 function saveOptions() {
-    AppStorage.setData({ '2048_options': OPTIONS });
+    Engine.Utilities.saveObject('2048_options', OPTIONS);
 }

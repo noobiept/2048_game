@@ -3,7 +3,6 @@ import { Block } from './block';
 import * as GameMenu from './game_menu';
 import * as Data from './data';
 import { GRID_LINE_SIZE } from './globals';
-import { getRandomInt, EVENT_KEY } from './utilities';
 
 var BLOCKS = [];
 var GRID_LINES = [];
@@ -58,7 +57,7 @@ export function addRandomBlock() {
     var position;
 
     // get the block
-    position = getRandomInt(0, emptyBlocks.length - 1);
+    position = Engine.Utilities.getRandomInt(0, emptyBlocks.length - 1);
 
     var blockPosition = emptyBlocks[position];
 
@@ -68,7 +67,7 @@ export function addRandomBlock() {
     // get the value
     var possibleValues = Data.getOption('spawnRange');
 
-    position = getRandomInt(0, possibleValues.length - 1);
+    position = Engine.Utilities.getRandomInt(0, possibleValues.length - 1);
 
     var value = possibleValues[position];
 
@@ -460,31 +459,35 @@ function hasGameEnded() {
     return -1;
 }
 
-function keyUpEvents(event) {
-    var key = event.keyCode;
+function keyUpEvents(event: KeyboardEvent) {
+    var key = event.key;
     var moved = false;
 
     switch (key) {
-        case EVENT_KEY.leftArrow:
-        case EVENT_KEY.a:
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
             moveLeft();
             moved = true;
             break;
 
-        case EVENT_KEY.rightArrow:
-        case EVENT_KEY.d:
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
             moveRight();
             moved = true;
             break;
 
-        case EVENT_KEY.upArrow:
-        case EVENT_KEY.w:
+        case 'ArrowUp':
+        case 'w':
+        case 'W':
             moveUp();
             moved = true;
             break;
 
-        case EVENT_KEY.downArrow:
-        case EVENT_KEY.s:
+        case 'ArrowDown':
+        case 's':
+        case 'S':
             moveDown();
             moved = true;
             break;
