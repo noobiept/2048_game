@@ -11,12 +11,36 @@ var GRID_LINES = [];
 
 export function init()
 {
-setMapLength( Data.getOption( 'gridLength' ) );
+var gridLength = Data.getOption( 'gridLength' );
+var spawnRange = Data.getOption( 'spawnRange' );
 
-GameMenu.init();
+setMapLength( gridLength );
+
+GameMenu.init({
+        gridLength: gridLength,
+        spawnRange: spawnRange,
+        onGridLengthChange: setGridLengthOption,
+        onSpawnRangeChange: setSpawnRangeOption
+    });
 addRandomBlock();
 
 document.body.addEventListener( 'keyup', keyUpEvents );
+}
+
+
+function setGridLengthOption( value: number )
+{
+Data.setOption( 'gridLength', value );
+setMapLength( value );
+addRandomBlock();
+}
+
+
+function setSpawnRangeOption( min: number, max: number )
+{
+Data.setOption( 'spawnRange', [ min, max ] );
+setSpawnValues( min, max );
+addRandomBlock();
 }
 
 

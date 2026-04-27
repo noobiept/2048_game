@@ -1,19 +1,22 @@
-import * as Data from './data';
-import * as Game from './game';
+interface MenuOptions {
+    gridLength: number;
+    spawnRange: number[];
+    onGridLengthChange: (value: number) => void;
+    onSpawnRangeChange: (min: number, max: number) => void;
+}
 
-export function init()
+export function init( options: MenuOptions )
 {
-initGridLength();
-initSpawnRange();
+initGridLength( options.gridLength, options.onGridLengthChange );
+initSpawnRange( options.spawnRange, options.onSpawnRangeChange );
 }
 
 
-function initGridLength()
+function initGridLength( length: number, onChange: (value: number) => void )
 {
 const input = document.querySelector<HTMLInputElement>( '#gridLength' )!;
 const label = document.querySelector<HTMLElement>( '#gridLengthLabel' )!;
 
-const length = Data.getOption( 'gridLength' );
 input.value = String( length );
 label.textContent = String( length );
 
@@ -25,14 +28,15 @@ input.addEventListener( 'input', () =>
 input.addEventListener( 'change', () =>
     {
     const value = Number( input.value );
-    Data.setOption( 'gridLength', value );
-    Game.setMapLength( value );
-    Game.addRandomBlock();
+    onChange( value );
     });
 }
 
 
-function initSpawnRange()
+function initSpawnRange(
+    range: number[],
+    onChange: (min: number, max: number) => void
+)
 {
 const minInput = document.querySelector<HTMLInputElement>( '#spawnRangeMin' )!;
 const maxInput = document.querySelector<HTMLInputElement>( '#spawnRangeMax' )!;
@@ -40,7 +44,6 @@ const fill = document.querySelector<HTMLElement>( '#spawnRangeFill' )!;
 const label = document.querySelector<HTMLElement>( '#spawnRangeLabel' )!;
 
 const values = [ 2, 4, 8, 16, 32 ];
-const range = Data.getOption( 'spawnRange' );
 const trackMin = Number( minInput.min );
 const trackMax = Number( minInput.max );
 const trackSpan = trackMax - trackMin;
@@ -61,9 +64,7 @@ const commit = () =>
     {
     const min = values[ Number( minInput.value ) ];
     const max = values[ Number( maxInput.value ) ];
-    Data.setOption( 'spawnRange', [ min, max ] );
-    Game.setSpawnValues( min, max );
-    Game.addRandomBlock();
+    onChange( min, max );
     };
 
 minInput.addEventListener( 'input', () =>
