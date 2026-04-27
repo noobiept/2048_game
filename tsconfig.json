@@ -1,22 +1,15 @@
 {
-  "exclude": [
-    "release",
-    "build",
-    "dist",
-    "node_modules",
-  ],
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "strict": false,
-    "skipLibCheck": true,
-    "noEmit": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "useDefineForClassFields": true
-  },
-  "include": [
-    "scripts/**/*.ts"
-  ]
+    "exclude": ["release", "build", "dist", "node_modules"],
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "strict": false,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "useDefineForClassFields": true
+    },
+    "include": ["scripts/**/*.ts"]
 }

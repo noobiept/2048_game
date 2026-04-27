@@ -1,7 +1,6 @@
 A sliding block puzzle game written in typescript.
 
-Description
-===========
+# Description
 
 - A grid with same value of column/lines (from 4 to 10).
 - Arrows keys (or 'wasd' keys) to move all the blocks in a direction (left/right/up/down).
@@ -12,13 +11,11 @@ Description
 - Game is won when a tile with a value of 2048 appears.
 - Game ends when there's no more possible moves (no empty spaces, and no adjacent tiles with the same value).
 
-Controls
-========
+# Controls
 
 Use the `arrow` keys or the `wasd` keys.
 
-Libraries
-=========
+# Libraries
 
 - typescript: `1.8`
 - createjs

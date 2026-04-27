@@ -1,8 +1,7 @@
 import * as Engine from '@drk4/game-engine';
 import { GRID_LINE_SIZE } from './globals';
 
-export class Block
-{
+export class Block {
     value: number;
     column: number;
     line: number;
@@ -26,37 +25,34 @@ export class Block
         '2048': 'rgb(116,108,255)'
     };
 
+    constructor(args) {
+        this.column = args.column;
+        this.line = args.line;
 
-constructor( args )
-    {
-    this.column = args.column;
-    this.line = args.line;
+        this.setupShape();
+        this.positionIn(this.column, this.line);
 
-    this.setupShape();
-    this.positionIn( this.column, this.line );
+        this.value = 0;
+        this.setValue(args.value);
 
-    this.value = 0;
-    this.setValue( args.value );
-
-    this.containerElement.opacity = 0;
-    new Engine.Tween( this.containerElement ).to( { opacity: 1 }, 0.5 ).start();
+        this.containerElement.opacity = 0;
+        new Engine.Tween(this.containerElement).to({ opacity: 1 }, 0.5).start();
     }
 
-setupShape()
-    {
-    var size = Block.size;
-    var textSize = 30;
+    setupShape() {
+        var size = Block.size;
+        var textSize = 30;
 
-    var background = new Engine.Rectangle({
+        var background = new Engine.Rectangle({
             x: 0,
             y: 0,
             width: size,
             height: size,
-            color: Block.colors[ '2' ],
+            color: Block.colors['2'],
             fill: true
         });
 
-    var value = new Engine.Text({
+        var value = new Engine.Text({
             x: 0,
             y: 0,
             text: '',
@@ -68,64 +64,61 @@ setupShape()
             fill: true
         });
 
-    var container = new Engine.Container();
+        var container = new Engine.Container();
 
-    container.addChild( background );
-    container.addChild( value );
+        container.addChild(background);
+        container.addChild(value);
 
-    Engine.getCanvas().addChild( container );
+        Engine.getCanvas().addChild(container);
 
-    this.backgroundElement = background;
-    this.valueElement = value;
-    this.containerElement = container;
+        this.backgroundElement = background;
+        this.valueElement = value;
+        this.containerElement = container;
     }
 
-positionIn( column, line )
-    {
-    var size = Block.size;
-    var lineSize = GRID_LINE_SIZE;
+    positionIn(column, line) {
+        var size = Block.size;
+        var lineSize = GRID_LINE_SIZE;
 
-    this.column = column;
-    this.line = line;
+        this.column = column;
+        this.line = line;
 
-    this.containerElement.x = (size + lineSize) * column + size / 2;
-    this.containerElement.y = (size + lineSize) * line + size / 2;
+        this.containerElement.x = (size + lineSize) * column + size / 2;
+        this.containerElement.y = (size + lineSize) * line + size / 2;
     }
 
-moveTo( column, line )
-    {
-    var size = Block.size;
-    var lineSize = GRID_LINE_SIZE;
+    moveTo(column, line) {
+        var size = Block.size;
+        var lineSize = GRID_LINE_SIZE;
 
-    this.column = column;
-    this.line = line;
+        this.column = column;
+        this.line = line;
 
-    var x = (size + lineSize) * column + size / 2;
-    var y = (size + lineSize) * line + size / 2;
+        var x = (size + lineSize) * column + size / 2;
+        var y = (size + lineSize) * line + size / 2;
 
-    new Engine.Tween( this.containerElement ).to( { x: x, y: y }, 0.1 ).start();
+        new Engine.Tween(this.containerElement).to({ x: x, y: y }, 0.1).start();
     }
 
-setValue( value )
-    {
-    this.value = value;
-    this.valueElement.text = String( value );
+    setValue(value) {
+        this.value = value;
+        this.valueElement.text = String(value);
 
-    this.setBackgroundColor( Block.colors[ value.toString() ] )
+        this.setBackgroundColor(Block.colors[value.toString()]);
     }
 
-setBackgroundColor( color )
-    {
-    this.backgroundElement.color = color;
+    setBackgroundColor(color) {
+        this.backgroundElement.color = color;
     }
 
-remove()
-    {
-    var _this = this;
+    remove() {
+        var _this = this;
 
-    new Engine.Tween( this.containerElement ).to( { opacity: 0 }, 0.2 ).call( function()
-        {
-        _this.containerElement.remove();
-        }).start();
+        new Engine.Tween(this.containerElement)
+            .to({ opacity: 0 }, 0.2)
+            .call(function () {
+                _this.containerElement.remove();
+            })
+            .start();
     }
 }

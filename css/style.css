@@ -1,71 +1,60 @@
-html, body
-    {
+html,
+body {
     overflow: visible;
-    }
+}
 
-body
-    {
+body {
     text-align: center;
-    }
+}
 
-#Canvas
-    {
+#Canvas {
     margin-bottom: 30px;
-    }
+}
 
-.sliderContainer
-    {
+.sliderContainer {
     margin: 10px;
-    }
+}
 
-.sliderContainer > *
-    {
+.sliderContainer > * {
     margin: 0 10px;
     vertical-align: middle;
-    }
+}
 
-#gridLength
-    {
+#gridLength {
     accent-color: #4a90e2;
     width: 200px;
-    }
-
+}
 
 /* ---- Dual-handle range slider ---- */
 
-.dualRange
-    {
+.dualRange {
     position: relative;
     display: inline-block;
     width: 200px;
     height: 24px;
-    }
+}
 
 .dualRange-track,
-.dualRange-fill
-    {
+.dualRange-fill {
     position: absolute;
     top: 50%;
     height: 4px;
     transform: translateY(-50%);
     border-radius: 2px;
     pointer-events: none;
-    }
+}
 
-.dualRange-track
-    {
+.dualRange-track {
     left: 0;
     right: 0;
     background: #ddd;
-    }
+}
 
-.dualRange-fill
-    {
+.dualRange-fill {
     background: #4a90e2;
-    }
+}
 
-.dualRange input[type="range"]
-    {
+.dualRange input[type='range'] {
     position: absolute;
     top: 0;
     left: 0;
@@ -76,22 +65,19 @@ body
     pointer-events: none;
     -webkit-appearance: none;
     appearance: none;
-    }
+}
 
-.dualRange input[type="range"]::-webkit-slider-runnable-track
-    {
+.dualRange input[type='range']::-webkit-slider-runnable-track {
     background: transparent;
     border: none;
-    }
+}
 
-.dualRange input[type="range"]::-moz-range-track
-    {
+.dualRange input[type='range']::-moz-range-track {
     background: transparent;
     border: none;
-    }
+}
 
-.dualRange input[type="range"]::-webkit-slider-thumb
-    {
+.dualRange input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 16px;
@@ -102,10 +88,9 @@ body
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     pointer-events: auto;
-    }
+}
 
-.dualRange input[type="range"]::-moz-range-thumb
-    {
+.dualRange input[type='range']::-moz-range-thumb {
     width: 16px;
     height: 16px;
     border-radius: 50%;
@@ -114,13 +99,11 @@ body
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     pointer-events: auto;
-    }
-
+}
 
 /* ---- Game-over dialog ---- */
 
-.dialogOverlay
-    {
+.dialogOverlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -128,10 +111,9 @@ body
     height: 100vh;
     background-color: rgba(22, 28, 36, 0.52);
     z-index: 100;
-    }
+}
 
-.dialog
-    {
+.dialog {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -147,41 +129,36 @@ body
     font-family: Arial, Helvetica, sans-serif;
     text-align: left;
     z-index: 101;
-    }
+}
 
-.dialogTitle
-    {
+.dialogTitle {
     margin: 0 0 14px;
     color: #101828;
     font-size: 24px;
     font-weight: bold;
     line-height: 1.15;
-    }
+}
 
-.dialogBody
-    {
+.dialogBody {
     margin: 0;
-    }
+}
 
-.GameOverMessage
-    {
+.GameOverMessage {
     white-space: pre-line;
     color: #344054;
     font-size: 18px;
     line-height: 1.55;
-    }
+}
 
-.dialogButtons
-    {
+.dialogButtons {
     display: flex;
     justify-content: flex-end;
     margin-top: 22px;
     padding-top: 16px;
     border-top: 1px solid rgba(23, 32, 51, 0.12);
-    }
+}
 
-.dialogButton
-    {
+.dialogButton {
     min-width: 72px;
     padding: 8px 16px;
     color: white;
@@ -193,15 +170,13 @@ body
     font-size: 15px;
     font-weight: bold;
     line-height: 1.2;
-    }
+}
 
-.dialogButton:hover
-    {
+.dialogButton:hover {
     background: #255b95;
-    }
+}
 
-.dialogButton:focus-visible
-    {
+.dialogButton:focus-visible {
     outline: 3px solid rgba(74, 144, 226, 0.35);
     outline-offset: 2px;
-    }
+}

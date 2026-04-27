@@ -1,33 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>2048 game</title>
+    <head>
+        <title>2048 game</title>
 
-    <script type="module" src="/scripts/main.ts"></script>
+        <script type="module" src="/scripts/main.ts"></script>
 
-    <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <div id="Canvas"></div>
 
-    <div id="Canvas"></div>
-
-    <div id="GameMenu">
-        <div class="sliderContainer">
-            <span>Grid length</span>
-            <input type="range" id="gridLength" min="4" max="10" step="1" />
-            <span id="gridLengthLabel"></span>
-        </div>
-
-        <div class="sliderContainer">
-            <span>Spawn range</span>
-            <div class="dualRange">
-                <div class="dualRange-track"></div>
-                <div class="dualRange-fill" id="spawnRangeFill"></div>
-                <input type="range" id="spawnRangeMin" min="0" max="4" step="1" />
-                <input type="range" id="spawnRangeMax" min="0" max="4" step="1" />
+        <div id="GameMenu">
+            <div class="sliderContainer">
+                <span>Grid length</span>
+                <input type="range" id="gridLength" min="4" max="10" step="1" />
+                <span id="gridLengthLabel"></span>
             </div>
-            <span id="spawnRangeLabel"></span>
+
+            <div class="sliderContainer">
+                <span>Spawn range</span>
+                <div class="dualRange">
+                    <div class="dualRange-track"></div>
+                    <div class="dualRange-fill" id="spawnRangeFill"></div>
+                    <input type="range" id="spawnRangeMin" min="0" max="4" step="1" />
+                    <input type="range" id="spawnRangeMax" min="0" max="4" step="1" />
+                </div>
+                <span id="spawnRangeLabel"></span>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>
