@@ -3,8 +3,9 @@ import { Block } from './block';
 import * as GameMenu from './game_menu';
 import * as Data from './data';
 import { GRID_LINE_SIZE } from './globals';
+import { Grid, GameStatus, getSpawnValues } from './grid';
 
-var BLOCKS = [];
+var GRID: Grid;
 var GRID_LINES = [];
 
 export function init() {
@@ -32,7 +33,7 @@ function setGridLengthOption(value: number) {
 
 function setSpawnRangeOption(min: number, max: number) {
     Data.setOption('spawnRange', [min, max]);
-    clearBlocks();
+    GRID.clear();
     addRandomBlock();
 }
 
@@ -52,320 +53,54 @@ function drawLine(x, y, width, height) {
 }
 
 export function addRandomBlock() {
-    var emptyBlocks = getEmptyBlocks();
+    var emptyCells = GRID.getEmptyCells();
 
-    var position;
+    var position = Engine.Utilities.getRandomInt(0, emptyCells.length - 1);
+    var cell = emptyCells[position];
 
-    // get the block
-    position = Engine.Utilities.getRandomInt(0, emptyBlocks.length - 1);
-
-    var blockPosition = emptyBlocks[position];
-
-    var column = blockPosition.column;
-    var line = blockPosition.line;
-
-    // get the value
     var possibleValues = getSpawnValues(Data.getOption('spawnRange'));
 
     position = Engine.Utilities.getRandomInt(0, possibleValues.length - 1);
 
     var value = possibleValues[position];
 
-    addBlock({
-        column: column,
-        line: line,
+    var block = new Block({
+        column: cell.column,
+        line: cell.line,
         value: value
     });
-}
 
-function getEmptyBlocks() {
-    var emptyBlocks = [];
-    var gridLength = Data.getOption('gridLength');
-
-    for (var column = 0; column < gridLength; column++) {
-        for (var line = 0; line < gridLength; line++) {
-            if (BLOCKS[column][line] === null) {
-                emptyBlocks.push({
-                    column: column,
-                    line: line
-                });
-            }
-        }
-    }
-
-    return emptyBlocks;
-}
-
-function isThereEmptyBlocks() {
-    var mapLength = Data.getOption('gridLength');
-
-    for (var column = 0; column < mapLength; column++) {
-        for (var line = 0; line < mapLength; line++) {
-            var block = BLOCKS[column][line];
-
-            if (block === null) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-function moveLeft() {
-    var gridLength = Data.getOption('gridLength');
-    var moved = false;
-
-    // combine
-    for (var line = 0; line < gridLength; line++) {
-        var firstBlock = null;
-
-        for (var column = gridLength - 1; column >= 0; column--) {
-            var block = BLOCKS[column][line];
-
-            if (block !== null) {
-                if (firstBlock === null) {
-                    firstBlock = block;
-                } else {
-                    if (firstBlock.value == block.value) {
-                        block.setValue(block.value * 2);
-
-                        removeBlock(firstBlock);
-                        moved = true;
-                        break; // only one combination per line
-                    } else {
-                        firstBlock = block;
-                    }
-                }
-            }
-        }
-    }
-
-    // count and move
-    // loop in the opposite direction
-    for (var line = 0; line < gridLength; line++) {
-        var position = 0;
-
-        for (var column = position; column < gridLength; column++) {
-            var block = BLOCKS[column][line];
-
-            if (block !== null) {
-                if (block.column !== position) {
-                    moved = true;
-                }
-
-                moveBlock(block, position, line);
-
-                position++;
-            }
-        }
-    }
-
-    return moved;
-}
-
-function moveRight() {
-    var gridLength = Data.getOption('gridLength');
-    var moved = false;
-
-    // combine
-    for (var line = 0; line < gridLength; line++) {
-        var firstBlock = null;
-
-        for (var column = 0; column < gridLength; column++) {
-            var block = BLOCKS[column][line];
-
-            if (block !== null) {
-                if (firstBlock === null) {
-                    firstBlock = block;
-                } else {
-                    if (firstBlock.value == block.value) {
-                        block.setValue(block.value * 2);
-
-                        removeBlock(firstBlock);
-                        moved = true;
-                        break; // only one combination per line
-                    } else {
-                        firstBlock = block;
-                    }
-                }
-            }
-        }
-    }
-
-    // count and move
-    // loop in the opposite direction
-    for (var line = 0; line < gridLength; line++) {
-        var position = gridLength - 1;
-
-        for (var column = position; column >= 0; column--) {
-            var block = BLOCKS[column][line];
-
-            if (block !== null) {
-                if (block.column !== position) {
-                    moved = true;
-                }
-
-                moveBlock(block, position, line);
-
-                position--;
-            }
-        }
-    }
-
-    return moved;
-}
-
-function moveUp() {
-    var gridLength = Data.getOption('gridLength');
-    var moved = false;
-
-    // combine
-    for (var column = 0; column < gridLength; column++) {
-        var firstBlock = null;
-
-        for (var line = gridLength - 1; line >= 0; line--) {
-            var block = BLOCKS[column][line];
-
-            if (block !== null) {
-                if (firstBlock === null) {
-                    firstBlock = block;
-                } else {
-                    if (firstBlock.value == block.value) {
-                        block.setValue(block.value * 2);
-
-                        removeBlock(firstBlock);
-                        moved = true;
-                        break; // only one combination per line
-                    } else {
-                        firstBlock = block;
-                    }
-                }
-            }
-        }
-    }
-
-    // count and move
-    // loop in the opposite direction
-    for (var column = 0; column < gridLength; column++) {
-        var position = 0;
-
-        for (var line = position; line < gridLength; line++) {
-            var block = BLOCKS[column][line];
-
-            if (block !== null) {
-                if (block.line !== position) {
-                    moved = true;
-                }
-
-                moveBlock(block, column, position);
-
-                position++;
-            }
-        }
-    }
-
-    return moved;
-}
-
-function moveDown() {
-    var gridLength = Data.getOption('gridLength');
-    var moved = false;
-
-    // combine
-    for (var column = 0; column < gridLength; column++) {
-        var firstBlock = null;
-
-        for (var line = 0; line < gridLength; line++) {
-            var block = BLOCKS[column][line];
-
-            if (block !== null) {
-                if (firstBlock === null) {
-                    firstBlock = block;
-                } else {
-                    if (firstBlock.value == block.value) {
-                        block.setValue(block.value * 2);
-
-                        removeBlock(firstBlock);
-                        moved = true;
-                        break; // only one combination per line
-                    } else {
-                        firstBlock = block;
-                    }
-                }
-            }
-        }
-    }
-
-    // count and move
-    // loop in the opposite direction
-    for (var column = 0; column < gridLength; column++) {
-        var position = gridLength - 1;
-
-        for (var line = position; line >= 0; line--) {
-            var block = BLOCKS[column][line];
-
-            if (block !== null) {
-                if (block.line !== position) {
-                    moved = true;
-                }
-
-                moveBlock(block, column, position);
-
-                position--;
-            }
-        }
-    }
-
-    return moved;
+    GRID.placeBlock(block);
 }
 
 export function restart() {
-    clearBlocks();
+    GRID.clear();
 
     addRandomBlock();
 }
 
-function clearBlocks() {
-    for (var column = 0; column < BLOCKS.length; column++) {
-        var columnArray = BLOCKS[column];
-
-        for (var line = 0; line < columnArray.length; line++) {
-            var block = BLOCKS[column][line];
-
-            removeBlock(block);
-        }
-    }
-}
-
-function clear() {
-    clearBlocks();
-
-    // clear the grid lines
+function clearGridLines() {
     for (var a = 0; a < GRID_LINES.length; a++) {
         Engine.getCanvas().removeChild(GRID_LINES[a]);
     }
 
     GRID_LINES.length = 0;
-    BLOCKS.length = 0;
 }
 
 export function setMapLength(length: number) {
-    clear();
+    if (GRID) {
+        GRID.clear();
+    }
+
+    clearGridLines();
+
+    GRID = new Grid(length);
 
     var blockSize = Block.size;
     var lineSize = GRID_LINE_SIZE;
 
     var size = length * blockSize + (length - 1) * lineSize;
     Engine.getCanvas().updateDimensions(size, size);
-
-    for (var column = 0; column < length; column++) {
-        BLOCKS[column] = [];
-
-        for (var line = 0; line < length; line++) {
-            BLOCKS[column][line] = null;
-        }
-    }
 
     for (var a = 1; a < length; a++) {
         var position = blockSize * a + (a - 1) * lineSize;
@@ -376,123 +111,6 @@ export function setMapLength(length: number) {
     }
 }
 
-function getSpawnValues(range: number[]) {
-    var min = range[0];
-    var max = range[1];
-    var value = min;
-    var possibleValues = [];
-
-    while (value <= max) {
-        possibleValues.push(value);
-
-        value *= 2;
-    }
-
-    return possibleValues;
-}
-
-function addBlock(args) {
-    var block = new Block(args);
-
-    BLOCKS[args.column][args.line] = block;
-}
-
-function removeBlock(block) {
-    if (block !== null) {
-        BLOCKS[block.column][block.line] = null;
-
-        block.remove();
-    }
-}
-
-function moveBlock(block, newColumn, newLine) {
-    BLOCKS[block.column][block.line] = null;
-
-    block.moveTo(newColumn, newLine);
-
-    BLOCKS[newColumn][newLine] = block;
-}
-
-/*
-    - win:
-        - when there's a block with a 2048 value
-
-    - loose:
-        - no more empty spaces and no adjacent blocks with the same value
-
-    - returns:
-        - 0 if game hasn't ended
-        - 1 if ended in victory
-        - -1 if ended in a loss
- */
-function hasGameEnded() {
-    var mapLength = Data.getOption('gridLength');
-
-    var column;
-    var line;
-    var block;
-
-    for (column = 0; column < mapLength; column++) {
-        for (line = 0; line < mapLength; line++) {
-            block = BLOCKS[column][line];
-
-            if (block && block.value >= 2048) {
-                return 1;
-            }
-        }
-    }
-
-    // check if there's an empty space (if there is, means the game hasn't ended)
-    if (isThereEmptyBlocks()) {
-        return 0;
-    }
-
-    var left, right, up, down;
-
-    // the grid is all filled, need to check if there's adjacent blocks with the same value
-    for (column = 0; column < mapLength; column++) {
-        for (line = 0; line < mapLength; line++) {
-            block = BLOCKS[column][line];
-
-            // check all positions around this one
-            if (column <= 0) {
-                left = null;
-            } else {
-                left = BLOCKS[column - 1][line];
-            }
-
-            if (column >= mapLength - 1) {
-                right = null;
-            } else {
-                right = BLOCKS[column + 1][line];
-            }
-
-            if (line <= 0) {
-                up = null;
-            } else {
-                up = BLOCKS[column][line - 1];
-            }
-
-            if (line >= mapLength - 1) {
-                down = null;
-            } else {
-                down = BLOCKS[column][line + 1];
-            }
-
-            if (
-                (left && left.value == block.value) ||
-                (right && right.value == block.value) ||
-                (up && up.value == block.value) ||
-                (down && down.value == block.value)
-            ) {
-                return 0;
-            }
-        }
-    }
-
-    return -1;
-}
-
 function keyUpEvents(event: KeyboardEvent) {
     var key = event.key;
     var moved = false;
@@ -501,35 +119,35 @@ function keyUpEvents(event: KeyboardEvent) {
         case 'ArrowLeft':
         case 'a':
         case 'A':
-            moved = moveLeft();
+            moved = GRID.moveLeft();
             break;
 
         case 'ArrowRight':
         case 'd':
         case 'D':
-            moved = moveRight();
+            moved = GRID.moveRight();
             break;
 
         case 'ArrowUp':
         case 'w':
         case 'W':
-            moved = moveUp();
+            moved = GRID.moveUp();
             break;
 
         case 'ArrowDown':
         case 's':
         case 'S':
-            moved = moveDown();
+            moved = GRID.moveDown();
             break;
     }
 
     if (moved === true) {
-        var gameEnded = hasGameEnded();
+        var gameEnded = GRID.hasGameEnded();
 
-        if (gameEnded !== 0) {
+        if (gameEnded !== GameStatus.Ongoing) {
             var title = 'Game over';
 
-            if (gameEnded === 1) {
+            if (gameEnded === GameStatus.Victory) {
                 title = 'Victory!';
             }
 
@@ -541,7 +159,7 @@ function keyUpEvents(event: KeyboardEvent) {
 
             dialog.open();
         } else {
-            if (isThereEmptyBlocks()) {
+            if (GRID.hasEmptyCells()) {
                 addRandomBlock();
             }
         }
@@ -555,17 +173,3 @@ function createMessageBody(text: string) {
 
     return body;
 }
-
-export const __testing = {
-    getSpawnValues,
-    moveLeft,
-    moveRight,
-    moveUp,
-    moveDown,
-    setBlocks(blocks: (Block | null)[][]) {
-        BLOCKS = blocks;
-    },
-    getBlocks(): (Block | null)[][] {
-        return BLOCKS;
-    }
-};
