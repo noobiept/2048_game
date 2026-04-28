@@ -9,5 +9,5 @@
         "noEmit": true,
         "isolatedModules": true
     },
-    "include": ["scripts/**/*.ts"]
+    "include": ["source/**/*.ts"]
 }

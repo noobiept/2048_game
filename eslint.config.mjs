@@ -7,7 +7,7 @@ export default [
         ignores: ['build/', 'dist/', 'node_modules/', 'release/']
     },
     {
-        files: ['scripts/**/*.ts'],
+        files: ['source/**/*.ts'],
         languageOptions: {
             parser: tseslint.parser,
             parserOptions: {
