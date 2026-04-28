@@ -5,12 +5,12 @@ import * as Data from './data';
 import { GRID_LINE_SIZE } from './globals';
 import { Grid, GameStatus, getSpawnValues } from './grid';
 
-var GRID: Grid;
-var GRID_LINES: Engine.Rectangle[] = [];
+let GRID: Grid;
+const GRID_LINES: Engine.Rectangle[] = [];
 
 export function init() {
-    var gridLength = Data.getOption('gridLength');
-    var spawnRange = Data.getOption('spawnRange');
+    const gridLength = Data.getOption('gridLength');
+    const spawnRange = Data.getOption('spawnRange');
 
     setMapLength(gridLength);
 
@@ -38,7 +38,7 @@ function setSpawnRangeOption(min: number, max: number) {
 }
 
 function drawLine(x: number, y: number, width: number, height: number): void {
-    var line = new Engine.Rectangle({
+    const line = new Engine.Rectangle({
         x: x + width / 2,
         y: y + height / 2,
         width: width,
@@ -53,18 +53,18 @@ function drawLine(x: number, y: number, width: number, height: number): void {
 }
 
 export function addRandomBlock() {
-    var emptyCells = GRID.getEmptyCells();
+    const emptyCells = GRID.getEmptyCells();
 
-    var position = Engine.Utilities.getRandomInt(0, emptyCells.length - 1);
-    var cell = emptyCells[position];
+    let position = Engine.Utilities.getRandomInt(0, emptyCells.length - 1);
+    const cell = emptyCells[position];
 
-    var possibleValues = getSpawnValues(Data.getOption('spawnRange'));
+    const possibleValues = getSpawnValues(Data.getOption('spawnRange'));
 
     position = Engine.Utilities.getRandomInt(0, possibleValues.length - 1);
 
-    var value = possibleValues[position];
+    const value = possibleValues[position];
 
-    var block = new Block({
+    const block = new Block({
         column: cell.column,
         line: cell.line,
         value: value
@@ -80,7 +80,7 @@ export function restart() {
 }
 
 function clearGridLines() {
-    for (var a = 0; a < GRID_LINES.length; a++) {
+    for (let a = 0; a < GRID_LINES.length; a++) {
         Engine.getCanvas().removeChild(GRID_LINES[a]);
     }
 
@@ -96,15 +96,15 @@ export function setMapLength(length: number) {
 
     GRID = new Grid(length);
 
-    var blockSize = Block.size;
-    var lineSize = GRID_LINE_SIZE;
+    const blockSize = Block.size;
+    const lineSize = GRID_LINE_SIZE;
 
-    var size = length * blockSize + (length - 1) * lineSize;
+    const size = length * blockSize + (length - 1) * lineSize;
     Engine.getCanvas().updateDimensions(size, size);
 
-    for (var a = 1; a < length; a++) {
-        var position = blockSize * a + (a - 1) * lineSize;
-        var lineLength = length * blockSize + (length - 1) * lineSize;
+    for (let a = 1; a < length; a++) {
+        const position = blockSize * a + (a - 1) * lineSize;
+        const lineLength = length * blockSize + (length - 1) * lineSize;
 
         drawLine(position, 0, lineSize, lineLength);
         drawLine(0, position, lineLength, lineSize);
@@ -112,8 +112,8 @@ export function setMapLength(length: number) {
 }
 
 function keyUpEvents(event: KeyboardEvent) {
-    var key = event.key;
-    var moved = false;
+    const key = event.key;
+    let moved = false;
 
     switch (key) {
         case 'ArrowLeft':
@@ -146,16 +146,16 @@ function keyUpEvents(event: KeyboardEvent) {
             addRandomBlock();
         }
 
-        var gameEnded = GRID.hasGameEnded();
+        const gameEnded = GRID.hasGameEnded();
 
         if (gameEnded !== GameStatus.Ongoing) {
-            var title = 'Game over';
+            let title = 'Game over';
 
             if (gameEnded === GameStatus.Victory) {
                 title = 'Victory!';
             }
 
-            var dialog = new Engine.Utilities.Dialog({
+            const dialog = new Engine.Utilities.Dialog({
                 title: title,
                 body: createMessageBody('Starting a new round.'),
                 onClose: restart
@@ -167,7 +167,7 @@ function keyUpEvents(event: KeyboardEvent) {
 }
 
 function createMessageBody(text: string) {
-    var body = document.createElement('div');
+    const body = document.createElement('div');
     body.textContent = text;
     body.className = 'GameOverMessage';
 

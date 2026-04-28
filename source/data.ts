@@ -6,15 +6,29 @@ interface OptionsData {
 }
 type OptionsKey = 'gridLength' | 'spawnRange';
 
-var OPTIONS: OptionsData = {
+let OPTIONS: OptionsData = {
     gridLength: 4,
     spawnRange: [2, 4]
 };
 
-export function load(callback: () => any) {
-    var options = Engine.Utilities.getObject('2048_options');
+function isOptionsData(value: unknown): value is OptionsData {
+    if (value === null || typeof value !== 'object') {
+        return false;
+    }
 
-    if (options) {
+    const options = value as Record<string, unknown>;
+
+    return (
+        typeof options.gridLength === 'number' &&
+        Array.isArray(options.spawnRange) &&
+        options.spawnRange.every((item) => typeof item === 'number')
+    );
+}
+
+export function load(callback: () => void) {
+    const options: unknown = Engine.Utilities.getObject('2048_options');
+
+    if (isOptionsData(options)) {
         OPTIONS = options;
     }
 

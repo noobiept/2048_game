@@ -46,10 +46,10 @@ export class Block {
     }
 
     setupShape(): void {
-        var size = Block.size;
-        var textSize = 30;
+        const size = Block.size;
+        const textSize = 30;
 
-        var background = new Engine.Rectangle({
+        const background = new Engine.Rectangle({
             x: 0,
             y: 0,
             width: size,
@@ -58,7 +58,7 @@ export class Block {
             fill: true
         });
 
-        var value = new Engine.Text({
+        const value = new Engine.Text({
             x: 0,
             y: 0,
             text: '',
@@ -70,7 +70,7 @@ export class Block {
             fill: true
         });
 
-        var container = new Engine.Container();
+        const container = new Engine.Container();
 
         container.addChild(background);
         container.addChild(value);
@@ -83,8 +83,8 @@ export class Block {
     }
 
     positionIn(column: number, line: number): void {
-        var size = Block.size;
-        var lineSize = GRID_LINE_SIZE;
+        const size = Block.size;
+        const lineSize = GRID_LINE_SIZE;
 
         this.column = column;
         this.line = line;
@@ -94,14 +94,14 @@ export class Block {
     }
 
     moveTo(column: number, line: number): void {
-        var size = Block.size;
-        var lineSize = GRID_LINE_SIZE;
+        const size = Block.size;
+        const lineSize = GRID_LINE_SIZE;
 
         this.column = column;
         this.line = line;
 
-        var x = (size + lineSize) * column + size / 2;
-        var y = (size + lineSize) * line + size / 2;
+        const x = (size + lineSize) * column + size / 2;
+        const y = (size + lineSize) * line + size / 2;
 
         new Engine.Tween(this.containerElement).to({ x: x, y: y }, 0.1).start();
     }
@@ -118,12 +118,10 @@ export class Block {
     }
 
     remove(): void {
-        var _this = this;
-
         new Engine.Tween(this.containerElement)
             .to({ opacity: 0 }, 0.2)
-            .call(function () {
-                _this.containerElement.remove();
+            .call(() => {
+                this.containerElement.remove();
             })
             .start();
     }

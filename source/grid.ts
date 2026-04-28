@@ -26,10 +26,10 @@ export class Grid {
         this.length = length;
         this.cells = [];
 
-        for (var column = 0; column < length; column++) {
+        for (let column = 0; column < length; column++) {
             this.cells[column] = [];
 
-            for (var line = 0; line < length; line++) {
+            for (let line = 0; line < length; line++) {
                 this.cells[column][line] = null;
             }
         }
@@ -40,10 +40,10 @@ export class Grid {
     }
 
     getEmptyCells(): CellPosition[] {
-        var emptyCells: CellPosition[] = [];
+        const emptyCells: CellPosition[] = [];
 
-        for (var column = 0; column < this.length; column++) {
-            for (var line = 0; line < this.length; line++) {
+        for (let column = 0; column < this.length; column++) {
+            for (let line = 0; line < this.length; line++) {
                 if (this.cells[column][line] === null) {
                     emptyCells.push({ column: column, line: line });
                 }
@@ -54,8 +54,8 @@ export class Grid {
     }
 
     hasEmptyCells(): boolean {
-        for (var column = 0; column < this.length; column++) {
-            for (var line = 0; line < this.length; line++) {
+        for (let column = 0; column < this.length; column++) {
+            for (let line = 0; line < this.length; line++) {
                 if (this.cells[column][line] === null) {
                     return true;
                 }
@@ -66,29 +66,29 @@ export class Grid {
     }
 
     clear(): void {
-        for (var column = 0; column < this.length; column++) {
-            for (var line = 0; line < this.length; line++) {
+        for (let column = 0; column < this.length; column++) {
+            for (let line = 0; line < this.length; line++) {
                 this.removeBlock(this.cells[column][line]);
             }
         }
     }
 
     moveLeft(): boolean {
-        var moved = false;
+        let moved = false;
 
         // combine: scan from the destination edge outward so the leftmost pair merges first.
         // a tile that just merged cannot merge again on the same move
-        for (var line = 0; line < this.length; line++) {
-            var firstBlock: BlockLike | null = null;
+        for (let line = 0; line < this.length; line++) {
+            let firstBlock: BlockLike | null = null;
 
-            for (var column = 0; column < this.length; column++) {
-                var block = this.cells[column][line];
+            for (let column = 0; column < this.length; column++) {
+                const block = this.cells[column][line];
 
                 if (block !== null) {
                     if (firstBlock === null) {
                         firstBlock = block;
                     } else {
-                        if (firstBlock.value == block.value) {
+                        if (firstBlock.value === block.value) {
                             firstBlock.setValue(firstBlock.value * 2);
 
                             this.removeBlock(block);
@@ -104,11 +104,11 @@ export class Grid {
 
         // count and move
         // loop in the opposite direction
-        for (var line = 0; line < this.length; line++) {
-            var position = 0;
+        for (let line = 0; line < this.length; line++) {
+            let position = 0;
 
-            for (var column = position; column < this.length; column++) {
-                var block = this.cells[column][line];
+            for (let column = position; column < this.length; column++) {
+                const block = this.cells[column][line];
 
                 if (block !== null) {
                     if (block.column !== position) {
@@ -126,21 +126,21 @@ export class Grid {
     }
 
     moveRight(): boolean {
-        var moved = false;
+        let moved = false;
 
         // combine: scan from the destination edge outward so the rightmost pair merges first.
         // a tile that just merged cannot merge again on the same move
-        for (var line = 0; line < this.length; line++) {
-            var firstBlock: BlockLike | null = null;
+        for (let line = 0; line < this.length; line++) {
+            let firstBlock: BlockLike | null = null;
 
-            for (var column = this.length - 1; column >= 0; column--) {
-                var block = this.cells[column][line];
+            for (let column = this.length - 1; column >= 0; column--) {
+                const block = this.cells[column][line];
 
                 if (block !== null) {
                     if (firstBlock === null) {
                         firstBlock = block;
                     } else {
-                        if (firstBlock.value == block.value) {
+                        if (firstBlock.value === block.value) {
                             firstBlock.setValue(firstBlock.value * 2);
 
                             this.removeBlock(block);
@@ -156,11 +156,11 @@ export class Grid {
 
         // count and move
         // loop in the opposite direction
-        for (var line = 0; line < this.length; line++) {
-            var position = this.length - 1;
+        for (let line = 0; line < this.length; line++) {
+            let position = this.length - 1;
 
-            for (var column = position; column >= 0; column--) {
-                var block = this.cells[column][line];
+            for (let column = position; column >= 0; column--) {
+                const block = this.cells[column][line];
 
                 if (block !== null) {
                     if (block.column !== position) {
@@ -178,21 +178,21 @@ export class Grid {
     }
 
     moveUp(): boolean {
-        var moved = false;
+        let moved = false;
 
         // combine: scan from the destination edge outward so the topmost pair merges first.
         // a tile that just merged cannot merge again on the same move
-        for (var column = 0; column < this.length; column++) {
-            var firstBlock: BlockLike | null = null;
+        for (let column = 0; column < this.length; column++) {
+            let firstBlock: BlockLike | null = null;
 
-            for (var line = 0; line < this.length; line++) {
-                var block = this.cells[column][line];
+            for (let line = 0; line < this.length; line++) {
+                const block = this.cells[column][line];
 
                 if (block !== null) {
                     if (firstBlock === null) {
                         firstBlock = block;
                     } else {
-                        if (firstBlock.value == block.value) {
+                        if (firstBlock.value === block.value) {
                             firstBlock.setValue(firstBlock.value * 2);
 
                             this.removeBlock(block);
@@ -208,11 +208,11 @@ export class Grid {
 
         // count and move
         // loop in the opposite direction
-        for (var column = 0; column < this.length; column++) {
-            var position = 0;
+        for (let column = 0; column < this.length; column++) {
+            let position = 0;
 
-            for (var line = position; line < this.length; line++) {
-                var block = this.cells[column][line];
+            for (let line = position; line < this.length; line++) {
+                const block = this.cells[column][line];
 
                 if (block !== null) {
                     if (block.line !== position) {
@@ -230,21 +230,21 @@ export class Grid {
     }
 
     moveDown(): boolean {
-        var moved = false;
+        let moved = false;
 
         // combine: scan from the destination edge outward so the bottommost pair merges first.
         // a tile that just merged cannot merge again on the same move
-        for (var column = 0; column < this.length; column++) {
-            var firstBlock: BlockLike | null = null;
+        for (let column = 0; column < this.length; column++) {
+            let firstBlock: BlockLike | null = null;
 
-            for (var line = this.length - 1; line >= 0; line--) {
-                var block = this.cells[column][line];
+            for (let line = this.length - 1; line >= 0; line--) {
+                const block = this.cells[column][line];
 
                 if (block !== null) {
                     if (firstBlock === null) {
                         firstBlock = block;
                     } else {
-                        if (firstBlock.value == block.value) {
+                        if (firstBlock.value === block.value) {
                             firstBlock.setValue(firstBlock.value * 2);
 
                             this.removeBlock(block);
@@ -260,11 +260,11 @@ export class Grid {
 
         // count and move
         // loop in the opposite direction
-        for (var column = 0; column < this.length; column++) {
-            var position = this.length - 1;
+        for (let column = 0; column < this.length; column++) {
+            let position = this.length - 1;
 
-            for (var line = position; line >= 0; line--) {
-                var block = this.cells[column][line];
+            for (let line = position; line >= 0; line--) {
+                const block = this.cells[column][line];
 
                 if (block !== null) {
                     if (block.line !== position) {
@@ -294,9 +294,9 @@ export class Grid {
             - -1 if ended in a loss
      */
     hasGameEnded(): GameStatus {
-        for (var column = 0; column < this.length; column++) {
-            for (var line = 0; line < this.length; line++) {
-                var block = this.cells[column][line];
+        for (let column = 0; column < this.length; column++) {
+            for (let line = 0; line < this.length; line++) {
+                const block = this.cells[column][line];
 
                 if (block && block.value >= 2048) {
                     return GameStatus.Victory;
@@ -308,12 +308,12 @@ export class Grid {
             return GameStatus.Ongoing;
         }
 
-        var left, right, up, down;
+        let left, right, up, down;
 
         // the grid is all filled, need to check if there's adjacent blocks with the same value
-        for (var column = 0; column < this.length; column++) {
-            for (var line = 0; line < this.length; line++) {
-                var block = this.cells[column][line];
+        for (let column = 0; column < this.length; column++) {
+            for (let line = 0; line < this.length; line++) {
+                const block = this.cells[column][line];
 
                 if (column <= 0) {
                     left = null;
@@ -340,10 +340,10 @@ export class Grid {
                 }
 
                 if (
-                    (left && left.value == block!.value) ||
-                    (right && right.value == block!.value) ||
-                    (up && up.value == block!.value) ||
-                    (down && down.value == block!.value)
+                    (left && left.value === block!.value) ||
+                    (right && right.value === block!.value) ||
+                    (up && up.value === block!.value) ||
+                    (down && down.value === block!.value)
                 ) {
                     return GameStatus.Ongoing;
                 }
@@ -368,10 +368,10 @@ export class Grid {
 }
 
 export function getSpawnValues(range: number[]): number[] {
-    var min = range[0];
-    var max = range[1];
-    var value = min;
-    var possibleValues: number[] = [];
+    const min = range[0];
+    const max = range[1];
+    let value = min;
+    const possibleValues: number[] = [];
 
     while (value <= max) {
         possibleValues.push(value);
