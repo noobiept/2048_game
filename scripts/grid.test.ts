@@ -125,9 +125,7 @@ describe('movement details', () => {
         expect(bottomRight.remove).toHaveBeenCalledOnce();
     });
 
-    // Three same-value tiles in one row: only one merge is allowed per move.
-    // moveLeft scans right-to-left, so the rightmost pair merges and the leftmost tile is left alone.
-    test('moveLeft only merges one pair per line when three same-value tiles are present', () => {
+    test('moveLeft merges the leftmost pair when three same-value tiles are present', () => {
         const left = createBlock(0, 0);
         const middle = createBlock(1, 0);
         const right = createBlock(2, 0);
@@ -135,9 +133,27 @@ describe('movement details', () => {
         const grid = gridWith([left, middle, right]);
 
         expect(grid.moveLeft()).toBe(true);
-        expect(left.value).toBe(2);
-        expect(middle.value).toBe(4);
-        expect(right.remove).toHaveBeenCalledOnce();
+        expect(left.value).toBe(4);
+        expect(middle.remove).toHaveBeenCalledOnce();
+        expect(right.value).toBe(2);
+        expect(right.column).toBe(1);
+    });
+
+    test('moveLeft performs two non-overlapping merges in one row', () => {
+        const a = createBlock(0, 0);
+        const b = createBlock(1, 0);
+        const c = createBlock(2, 0);
+        const d = createBlock(3, 0);
+
+        const grid = gridWith([a, b, c, d]);
+
+        expect(grid.moveLeft()).toBe(true);
+        expect(a.value).toBe(4);
+        expect(a.column).toBe(0);
+        expect(c.value).toBe(4);
+        expect(c.column).toBe(1);
+        expect(b.remove).toHaveBeenCalledOnce();
+        expect(d.remove).toHaveBeenCalledOnce();
     });
 });
 
@@ -228,5 +244,43 @@ describe('hasGameEnded', () => {
         );
 
         expect(grid.hasGameEnded()).toBe(GameStatus.Loss);
+    });
+
+    //   pre-move      post-move      post-spawn
+    //   2  4          _  4           2  4
+    //   2  2    →     4  2     →     4  2
+    test('returns Loss when a move opens a cell, the spawn fills it, and no merges remain', () => {
+        const grid = gridWith(
+            [
+                createBlock(0, 0, 2),
+                createBlock(1, 0, 4),
+                createBlock(0, 1, 2),
+                createBlock(1, 1, 2)
+            ],
+            2
+        );
+
+        grid.moveDown();
+        expect(grid.hasGameEnded()).toBe(GameStatus.Ongoing);
+
+        grid.placeBlock(createBlock(0, 0, 2));
+
+        expect(grid.hasGameEnded()).toBe(GameStatus.Loss);
+    });
+
+    test('returns Victory when a move produces a 2048 tile', () => {
+        const grid = gridWith(
+            [
+                createBlock(0, 0, 1024),
+                createBlock(1, 0, 2),
+                createBlock(0, 1, 1024),
+                createBlock(1, 1, 4)
+            ],
+            2
+        );
+
+        grid.moveUp();
+
+        expect(grid.hasGameEnded()).toBe(GameStatus.Victory);
     });
 });

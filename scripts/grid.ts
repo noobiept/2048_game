@@ -76,11 +76,12 @@ export class Grid {
     moveLeft(): boolean {
         var moved = false;
 
-        // combine
+        // combine: scan from the destination edge outward so the leftmost pair merges first.
+        // a tile that just merged cannot merge again on the same move
         for (var line = 0; line < this.length; line++) {
             var firstBlock: BlockLike | null = null;
 
-            for (var column = this.length - 1; column >= 0; column--) {
+            for (var column = 0; column < this.length; column++) {
                 var block = this.cells[column][line];
 
                 if (block !== null) {
@@ -88,11 +89,11 @@ export class Grid {
                         firstBlock = block;
                     } else {
                         if (firstBlock.value == block.value) {
-                            block.setValue(block.value * 2);
+                            firstBlock.setValue(firstBlock.value * 2);
 
-                            this.removeBlock(firstBlock);
+                            this.removeBlock(block);
+                            firstBlock = null;
                             moved = true;
-                            break; // only one combination per line
                         } else {
                             firstBlock = block;
                         }
@@ -127,11 +128,12 @@ export class Grid {
     moveRight(): boolean {
         var moved = false;
 
-        // combine
+        // combine: scan from the destination edge outward so the rightmost pair merges first.
+        // a tile that just merged cannot merge again on the same move
         for (var line = 0; line < this.length; line++) {
             var firstBlock: BlockLike | null = null;
 
-            for (var column = 0; column < this.length; column++) {
+            for (var column = this.length - 1; column >= 0; column--) {
                 var block = this.cells[column][line];
 
                 if (block !== null) {
@@ -139,11 +141,11 @@ export class Grid {
                         firstBlock = block;
                     } else {
                         if (firstBlock.value == block.value) {
-                            block.setValue(block.value * 2);
+                            firstBlock.setValue(firstBlock.value * 2);
 
-                            this.removeBlock(firstBlock);
+                            this.removeBlock(block);
+                            firstBlock = null;
                             moved = true;
-                            break; // only one combination per line
                         } else {
                             firstBlock = block;
                         }
@@ -178,11 +180,12 @@ export class Grid {
     moveUp(): boolean {
         var moved = false;
 
-        // combine
+        // combine: scan from the destination edge outward so the topmost pair merges first.
+        // a tile that just merged cannot merge again on the same move
         for (var column = 0; column < this.length; column++) {
             var firstBlock: BlockLike | null = null;
 
-            for (var line = this.length - 1; line >= 0; line--) {
+            for (var line = 0; line < this.length; line++) {
                 var block = this.cells[column][line];
 
                 if (block !== null) {
@@ -190,11 +193,11 @@ export class Grid {
                         firstBlock = block;
                     } else {
                         if (firstBlock.value == block.value) {
-                            block.setValue(block.value * 2);
+                            firstBlock.setValue(firstBlock.value * 2);
 
-                            this.removeBlock(firstBlock);
+                            this.removeBlock(block);
+                            firstBlock = null;
                             moved = true;
-                            break; // only one combination per line
                         } else {
                             firstBlock = block;
                         }
@@ -229,11 +232,12 @@ export class Grid {
     moveDown(): boolean {
         var moved = false;
 
-        // combine
+        // combine: scan from the destination edge outward so the bottommost pair merges first.
+        // a tile that just merged cannot merge again on the same move
         for (var column = 0; column < this.length; column++) {
             var firstBlock: BlockLike | null = null;
 
-            for (var line = 0; line < this.length; line++) {
+            for (var line = this.length - 1; line >= 0; line--) {
                 var block = this.cells[column][line];
 
                 if (block !== null) {
@@ -241,11 +245,11 @@ export class Grid {
                         firstBlock = block;
                     } else {
                         if (firstBlock.value == block.value) {
-                            block.setValue(block.value * 2);
+                            firstBlock.setValue(firstBlock.value * 2);
 
-                            this.removeBlock(firstBlock);
+                            this.removeBlock(block);
+                            firstBlock = null;
                             moved = true;
-                            break; // only one combination per line
                         } else {
                             firstBlock = block;
                         }

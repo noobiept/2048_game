@@ -142,6 +142,10 @@ function keyUpEvents(event: KeyboardEvent) {
     }
 
     if (moved === true) {
+        if (GRID.hasEmptyCells()) {
+            addRandomBlock();
+        }
+
         var gameEnded = GRID.hasGameEnded();
 
         if (gameEnded !== GameStatus.Ongoing) {
@@ -158,10 +162,6 @@ function keyUpEvents(event: KeyboardEvent) {
             });
 
             dialog.open();
-        } else {
-            if (GRID.hasEmptyCells()) {
-                addRandomBlock();
-            }
         }
     }
 }
