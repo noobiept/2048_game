@@ -32,7 +32,7 @@ function setGridLengthOption(value: number) {
 
 function setSpawnRangeOption(min: number, max: number) {
     Data.setOption('spawnRange', [min, max]);
-    setSpawnValues(min, max);
+    clearBlocks();
     addRandomBlock();
 }
 
@@ -65,7 +65,7 @@ export function addRandomBlock() {
     var line = blockPosition.line;
 
     // get the value
-    var possibleValues = Data.getOption('spawnRange');
+    var possibleValues = getSpawnValues(Data.getOption('spawnRange'));
 
     position = Engine.Utilities.getRandomInt(0, possibleValues.length - 1);
 
@@ -114,6 +114,7 @@ function isThereEmptyBlocks() {
 
 function moveLeft() {
     var gridLength = Data.getOption('gridLength');
+    var moved = false;
 
     // combine
     for (var line = 0; line < gridLength; line++) {
@@ -130,6 +131,7 @@ function moveLeft() {
                         block.setValue(block.value * 2);
 
                         removeBlock(firstBlock);
+                        moved = true;
                         break; // only one combination per line
                     } else {
                         firstBlock = block;
@@ -148,16 +150,23 @@ function moveLeft() {
             var block = BLOCKS[column][line];
 
             if (block !== null) {
+                if (block.column !== position) {
+                    moved = true;
+                }
+
                 moveBlock(block, position, line);
 
                 position++;
             }
         }
     }
+
+    return moved;
 }
 
 function moveRight() {
     var gridLength = Data.getOption('gridLength');
+    var moved = false;
 
     // combine
     for (var line = 0; line < gridLength; line++) {
@@ -174,6 +183,7 @@ function moveRight() {
                         block.setValue(block.value * 2);
 
                         removeBlock(firstBlock);
+                        moved = true;
                         break; // only one combination per line
                     } else {
                         firstBlock = block;
@@ -192,16 +202,23 @@ function moveRight() {
             var block = BLOCKS[column][line];
 
             if (block !== null) {
+                if (block.column !== position) {
+                    moved = true;
+                }
+
                 moveBlock(block, position, line);
 
                 position--;
             }
         }
     }
+
+    return moved;
 }
 
 function moveUp() {
     var gridLength = Data.getOption('gridLength');
+    var moved = false;
 
     // combine
     for (var column = 0; column < gridLength; column++) {
@@ -218,6 +235,7 @@ function moveUp() {
                         block.setValue(block.value * 2);
 
                         removeBlock(firstBlock);
+                        moved = true;
                         break; // only one combination per line
                     } else {
                         firstBlock = block;
@@ -236,16 +254,23 @@ function moveUp() {
             var block = BLOCKS[column][line];
 
             if (block !== null) {
+                if (block.line !== position) {
+                    moved = true;
+                }
+
                 moveBlock(block, column, position);
 
                 position++;
             }
         }
     }
+
+    return moved;
 }
 
 function moveDown() {
     var gridLength = Data.getOption('gridLength');
+    var moved = false;
 
     // combine
     for (var column = 0; column < gridLength; column++) {
@@ -262,6 +287,7 @@ function moveDown() {
                         block.setValue(block.value * 2);
 
                         removeBlock(firstBlock);
+                        moved = true;
                         break; // only one combination per line
                     } else {
                         firstBlock = block;
@@ -280,12 +306,18 @@ function moveDown() {
             var block = BLOCKS[column][line];
 
             if (block !== null) {
+                if (block.line !== position) {
+                    moved = true;
+                }
+
                 moveBlock(block, column, position);
 
                 position--;
             }
         }
     }
+
+    return moved;
 }
 
 export function restart() {
@@ -344,9 +376,9 @@ export function setMapLength(length: number) {
     }
 }
 
-export function setSpawnValues(min, max) {
-    clearBlocks();
-
+function getSpawnValues(range: number[]) {
+    var min = range[0];
+    var max = range[1];
     var value = min;
     var possibleValues = [];
 
@@ -355,6 +387,8 @@ export function setSpawnValues(min, max) {
 
         value *= 2;
     }
+
+    return possibleValues;
 }
 
 function addBlock(args) {
@@ -467,29 +501,25 @@ function keyUpEvents(event: KeyboardEvent) {
         case 'ArrowLeft':
         case 'a':
         case 'A':
-            moveLeft();
-            moved = true;
+            moved = moveLeft();
             break;
 
         case 'ArrowRight':
         case 'd':
         case 'D':
-            moveRight();
-            moved = true;
+            moved = moveRight();
             break;
 
         case 'ArrowUp':
         case 'w':
         case 'W':
-            moveUp();
-            moved = true;
+            moved = moveUp();
             break;
 
         case 'ArrowDown':
         case 's':
         case 'S':
-            moveDown();
-            moved = true;
+            moved = moveDown();
             break;
     }
 
@@ -525,3 +555,17 @@ function createMessageBody(text: string) {
 
     return body;
 }
+
+export const __testing = {
+    getSpawnValues,
+    moveLeft,
+    moveRight,
+    moveUp,
+    moveDown,
+    setBlocks(blocks: (Block | null)[][]) {
+        BLOCKS = blocks;
+    },
+    getBlocks(): (Block | null)[][] {
+        return BLOCKS;
+    }
+};
