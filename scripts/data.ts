@@ -21,7 +21,7 @@ export function load(callback: () => any) {
     callback();
 }
 
-export function setOption(key: OptionsKey, value: any) {
+export function setOption<Key extends OptionsKey>(key: Key, value: OptionsData[Key]) {
     OPTIONS[key] = value;
     saveOptions();
 }

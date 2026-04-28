@@ -6,7 +6,7 @@ import { GRID_LINE_SIZE } from './globals';
 import { Grid, GameStatus, getSpawnValues } from './grid';
 
 var GRID: Grid;
-var GRID_LINES = [];
+var GRID_LINES: Engine.Rectangle[] = [];
 
 export function init() {
     var gridLength = Data.getOption('gridLength');
@@ -37,7 +37,7 @@ function setSpawnRangeOption(min: number, max: number) {
     addRandomBlock();
 }
 
-function drawLine(x, y, width, height) {
+function drawLine(x: number, y: number, width: number, height: number): void {
     var line = new Engine.Rectangle({
         x: x + width / 2,
         y: y + height / 2,

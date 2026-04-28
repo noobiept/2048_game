@@ -1,17 +1,23 @@
 import * as Engine from '@drk4/game-engine';
 import { GRID_LINE_SIZE } from './globals';
 
+interface BlockArgs {
+    column: number;
+    line: number;
+    value: number;
+}
+
 export class Block {
     value: number;
     column: number;
     line: number;
 
-    backgroundElement: Engine.Rectangle;
-    valueElement: Engine.Text;
-    containerElement: Engine.Container;
+    backgroundElement!: Engine.Rectangle;
+    valueElement!: Engine.Text;
+    containerElement!: Engine.Container;
 
     static size = 70;
-    static colors = {
+    static colors: Record<number, string> = {
         '2': 'rgb(243,243,241)',
         '4': 'rgb(192,243,241)',
         '8': 'rgb(243,177,241)',
@@ -25,7 +31,7 @@ export class Block {
         '2048': 'rgb(116,108,255)'
     };
 
-    constructor(args) {
+    constructor(args: BlockArgs) {
         this.column = args.column;
         this.line = args.line;
 
@@ -39,7 +45,7 @@ export class Block {
         new Engine.Tween(this.containerElement).to({ opacity: 1 }, 0.5).start();
     }
 
-    setupShape() {
+    setupShape(): void {
         var size = Block.size;
         var textSize = 30;
 
@@ -76,7 +82,7 @@ export class Block {
         this.containerElement = container;
     }
 
-    positionIn(column, line) {
+    positionIn(column: number, line: number): void {
         var size = Block.size;
         var lineSize = GRID_LINE_SIZE;
 
@@ -87,7 +93,7 @@ export class Block {
         this.containerElement.y = (size + lineSize) * line + size / 2;
     }
 
-    moveTo(column, line) {
+    moveTo(column: number, line: number): void {
         var size = Block.size;
         var lineSize = GRID_LINE_SIZE;
 
@@ -100,18 +106,18 @@ export class Block {
         new Engine.Tween(this.containerElement).to({ x: x, y: y }, 0.1).start();
     }
 
-    setValue(value) {
+    setValue(value: number): void {
         this.value = value;
         this.valueElement.text = String(value);
 
-        this.setBackgroundColor(Block.colors[value.toString()]);
+        this.setBackgroundColor(Block.colors[value] ?? Block.colors[2048]);
     }
 
-    setBackgroundColor(color) {
+    setBackgroundColor(color: string): void {
         this.backgroundElement.color = color;
     }
 
-    remove() {
+    remove(): void {
         var _this = this;
 
         new Engine.Tween(this.containerElement)
