@@ -8,6 +8,7 @@ A sliding block puzzle game written in typescript.
 - Tiles can only be merged once in each move.
 - Every turn, a new tile randomly appears on an empty spot on the map, with a value of 2 or 4 (the values can be changed).
 - When 2 tiles combine, we add the resulting value to the score.
+- A timer tracks each round, and the best victory time for each configuration is saved locally.
 - Game is won when a tile with a value of 2048 appears.
 - Game ends when there's no more possible moves (no empty spaces, and no adjacent tiles with the same value).
 

@@ -4,9 +4,11 @@ import * as GameMenu from './game_menu';
 import * as Data from './data';
 import { GRID_LINE_SIZE } from './globals';
 import { Grid, GameStatus, getSpawnValues } from './grid';
+import { formatVictoryTime } from './high_score';
 import { getSwipeDirection, type Direction } from './input';
 
 let GRID: Grid;
+let ROUND_TIMER: Engine.Utilities.Timer;
 const GRID_LINES: Engine.Rectangle[] = [];
 
 let swipeStartX: number | null = null;
@@ -24,7 +26,14 @@ export function init() {
         onGridLengthChange: setGridLengthOption,
         onSpawnRangeChange: setSpawnRangeOption
     });
-    addRandomBlock();
+    ROUND_TIMER = new Engine.Utilities.Timer({
+        updateElement: {
+            element: document.querySelector<HTMLElement>('#roundTimer')!,
+            format: (timer) => formatTime(timer.getTimeMilliseconds())
+        }
+    });
+    updateBestVictoryTime();
+    startRound();
 
     const canvasElement = document.querySelector<HTMLElement>('#Canvas')!;
     document.body.addEventListener('keyup', keyUpEvents);
@@ -36,13 +45,14 @@ export function init() {
 function setGridLengthOption(value: number) {
     Data.setOption('gridLength', value);
     setMapLength(value);
-    addRandomBlock();
+    updateBestVictoryTime();
+    startRound();
 }
 
 function setSpawnRangeOption(min: number, max: number) {
     Data.setOption('spawnRange', [min, max]);
-    GRID.clear();
-    addRandomBlock();
+    updateBestVictoryTime();
+    startRound();
 }
 
 function drawLine(x: number, y: number, width: number, height: number): void {
@@ -82,9 +92,14 @@ export function addRandomBlock() {
 }
 
 export function restart() {
+    startRound();
+}
+
+function startRound() {
     GRID.clear();
 
     addRandomBlock();
+    ROUND_TIMER.start({ interval: 100 });
 }
 
 function clearGridLines() {
@@ -208,21 +223,56 @@ function move(direction: Direction) {
         const gameEnded = GRID.hasGameEnded();
 
         if (gameEnded !== GameStatus.Ongoing) {
+            ROUND_TIMER.stop();
+
             let title = 'Game over';
+            let message = 'Starting a new round.';
 
             if (gameEnded === GameStatus.Victory) {
+                const victoryTime = ROUND_TIMER.getTimeMilliseconds();
+                const newRecord = Data.saveVictoryTime(victoryTime);
+                const timeText = formatTime(victoryTime);
+
                 title = 'Victory!';
+                message = 'Time: ' + timeText + '\n';
+
+                if (newRecord) {
+                    message += 'New best time!';
+                } else {
+                    message += 'Best: ' + formatBestVictoryTime();
+                }
+
+                message += '\nStarting a new round.';
+                updateBestVictoryTime();
             }
 
             const dialog = new Engine.Utilities.Dialog({
                 title: title,
-                body: createMessageBody('Starting a new round.'),
+                body: createMessageBody(message),
                 onClose: restart
             });
 
             dialog.open();
         }
     }
+}
+
+function updateBestVictoryTime() {
+    document.querySelector<HTMLElement>('#bestVictoryTime')!.textContent = formatBestVictoryTime();
+}
+
+function formatBestVictoryTime() {
+    const bestVictoryTime = Data.getBestVictoryTime();
+
+    if (bestVictoryTime === null) {
+        return '-';
+    }
+
+    return formatTime(bestVictoryTime);
+}
+
+function formatTime(time: number) {
+    return formatVictoryTime(time);
 }
 
 function createMessageBody(text: string) {
