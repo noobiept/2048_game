@@ -4,9 +4,13 @@ import * as GameMenu from './game_menu';
 import * as Data from './data';
 import { GRID_LINE_SIZE } from './globals';
 import { Grid, GameStatus, getSpawnValues } from './grid';
+import { getSwipeDirection, type Direction } from './input';
 
 let GRID: Grid;
 const GRID_LINES: Engine.Rectangle[] = [];
+
+let swipeStartX: number | null = null;
+let swipeStartY: number | null = null;
 
 export function init() {
     const gridLength = Data.getOption('gridLength');
@@ -22,7 +26,11 @@ export function init() {
     });
     addRandomBlock();
 
+    const canvasElement = document.querySelector<HTMLElement>('#Canvas')!;
     document.body.addEventListener('keyup', keyUpEvents);
+    canvasElement.addEventListener('pointerdown', pointerDownEvent);
+    canvasElement.addEventListener('pointerup', pointerUpEvent);
+    canvasElement.addEventListener('pointercancel', pointerCancelEvent);
 }
 
 function setGridLengthOption(value: number) {
@@ -113,30 +121,81 @@ export function setMapLength(length: number) {
 
 function keyUpEvents(event: KeyboardEvent) {
     const key = event.key;
-    let moved = false;
 
     switch (key) {
         case 'ArrowLeft':
         case 'a':
         case 'A':
-            moved = GRID.moveLeft();
+            move('left');
             break;
 
         case 'ArrowRight':
         case 'd':
         case 'D':
-            moved = GRID.moveRight();
+            move('right');
             break;
 
         case 'ArrowUp':
         case 'w':
         case 'W':
-            moved = GRID.moveUp();
+            move('up');
             break;
 
         case 'ArrowDown':
         case 's':
         case 'S':
+            move('down');
+            break;
+    }
+}
+
+function pointerDownEvent(event: PointerEvent) {
+    swipeStartX = event.clientX;
+    swipeStartY = event.clientY;
+
+    if (event.currentTarget instanceof HTMLElement) {
+        event.currentTarget.setPointerCapture(event.pointerId);
+    }
+}
+
+function pointerUpEvent(event: PointerEvent) {
+    if (swipeStartX === null || swipeStartY === null) {
+        return;
+    }
+
+    const offsetX = event.clientX - swipeStartX;
+    const offsetY = event.clientY - swipeStartY;
+    const direction = getSwipeDirection(offsetX, offsetY);
+
+    pointerCancelEvent();
+
+    if (direction !== null) {
+        move(direction);
+    }
+}
+
+function pointerCancelEvent() {
+    swipeStartX = null;
+    swipeStartY = null;
+}
+
+function move(direction: Direction) {
+    let moved = false;
+
+    switch (direction) {
+        case 'left':
+            moved = GRID.moveLeft();
+            break;
+
+        case 'right':
+            moved = GRID.moveRight();
+            break;
+
+        case 'up':
+            moved = GRID.moveUp();
+            break;
+
+        case 'down':
             moved = GRID.moveDown();
             break;
     }
