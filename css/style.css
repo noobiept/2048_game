@@ -25,7 +25,7 @@ body {
 
 #GameStats strong {
     display: inline-block;
-    min-width: 5ch;
+    min-width: 9ch;
     font-variant-numeric: tabular-nums;
     text-align: left;
 }

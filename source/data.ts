@@ -30,6 +30,7 @@ function isOptionsData(value: unknown): value is OptionsData {
     return (
         typeof options.gridLength === 'number' &&
         Array.isArray(options.spawnRange) &&
+        options.spawnRange.length === 2 &&
         options.spawnRange.every((item) => typeof item === 'number')
     );
 }
@@ -39,7 +40,9 @@ function isHighScoreData(value: unknown): value is HighScoreData {
         return false;
     }
 
-    return Object.values(value).every((item) => typeof item === 'number' && Number.isFinite(item));
+    return Object.entries(value).every(
+        ([key, item]) => key.length > 0 && typeof item === 'number' && Number.isFinite(item)
+    );
 }
 
 export function load(callback: () => void) {

@@ -1,7 +1,7 @@
 import * as Engine from '@drk4/game-engine';
 import { Block } from './block';
 import * as GameMenu from './game_menu';
-import * as Data from './data';
+import { getBestVictoryTime, getOption, saveVictoryTime, setOption } from './data';
 import { GRID_LINE_SIZE } from './globals';
 import { Grid, GameStatus, getSpawnValues } from './grid';
 import { formatVictoryTime } from './high_score';
@@ -9,14 +9,15 @@ import { getSwipeDirection, type Direction } from './input';
 
 let GRID: Grid;
 let ROUND_TIMER: Engine.Utilities.Timer;
+let GAME_ACTIVE = false;
 const GRID_LINES: Engine.Rectangle[] = [];
 
 let swipeStartX: number | null = null;
 let swipeStartY: number | null = null;
 
 export function init() {
-    const gridLength = Data.getOption('gridLength');
-    const spawnRange = Data.getOption('spawnRange');
+    const gridLength = getOption('gridLength');
+    const spawnRange = getOption('spawnRange');
 
     setMapLength(gridLength);
 
@@ -43,14 +44,14 @@ export function init() {
 }
 
 function setGridLengthOption(value: number) {
-    Data.setOption('gridLength', value);
+    setOption('gridLength', value);
     setMapLength(value);
     updateBestVictoryTime();
     startRound();
 }
 
 function setSpawnRangeOption(min: number, max: number) {
-    Data.setOption('spawnRange', [min, max]);
+    setOption('spawnRange', [min, max]);
     updateBestVictoryTime();
     startRound();
 }
@@ -76,7 +77,7 @@ export function addRandomBlock() {
     let position = Engine.Utilities.getRandomInt(0, emptyCells.length - 1);
     const cell = emptyCells[position];
 
-    const possibleValues = getSpawnValues(Data.getOption('spawnRange'));
+    const possibleValues = getSpawnValues(getOption('spawnRange'));
 
     position = Engine.Utilities.getRandomInt(0, possibleValues.length - 1);
 
@@ -96,6 +97,7 @@ export function restart() {
 }
 
 function startRound() {
+    GAME_ACTIVE = true;
     GRID.clear();
 
     addRandomBlock();
@@ -195,6 +197,10 @@ function pointerCancelEvent() {
 }
 
 function move(direction: Direction) {
+    if (!GAME_ACTIVE) {
+        return;
+    }
+
     let moved = false;
 
     switch (direction) {
@@ -223,6 +229,7 @@ function move(direction: Direction) {
         const gameEnded = GRID.hasGameEnded();
 
         if (gameEnded !== GameStatus.Ongoing) {
+            GAME_ACTIVE = false;
             ROUND_TIMER.stop();
 
             let title = 'Game over';
@@ -230,7 +237,7 @@ function move(direction: Direction) {
 
             if (gameEnded === GameStatus.Victory) {
                 const victoryTime = ROUND_TIMER.getTimeMilliseconds();
-                const newRecord = Data.saveVictoryTime(victoryTime);
+                const newRecord = saveVictoryTime(victoryTime);
                 const timeText = formatTime(victoryTime);
 
                 title = 'Victory!';
@@ -262,7 +269,7 @@ function updateBestVictoryTime() {
 }
 
 function formatBestVictoryTime() {
-    const bestVictoryTime = Data.getBestVictoryTime();
+    const bestVictoryTime = getBestVictoryTime();
 
     if (bestVictoryTime === null) {
         return '-';
