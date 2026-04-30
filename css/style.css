@@ -3,14 +3,40 @@ body {
     overflow: visible;
 }
 
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
 body {
+    margin: 0;
+    padding: 16px 8px 24px;
+    color: #172033;
+    background: #f8fafc;
     text-align: center;
 }
 
 #Canvas {
+    display: flex;
+    justify-content: center;
+    width: 100%;
     margin-bottom: 30px;
     touch-action: none;
     user-select: none;
+}
+
+#Game-canvasContainer {
+    max-width: 100%;
+}
+
+#Canvas .Game-Canvas {
+    display: block;
+    background: white;
 }
 
 #GameStats {
@@ -30,6 +56,11 @@ body {
     text-align: left;
 }
 
+#GameMenu {
+    color: #2f3a4a;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .sliderContainer {
     margin: 10px;
 }
@@ -40,8 +71,55 @@ body {
 }
 
 #gridLength {
+    -webkit-appearance: none;
+    appearance: none;
     accent-color: #4a90e2;
     width: 200px;
+    height: 24px;
+    background: transparent;
+}
+
+#gridLength::-webkit-slider-runnable-track {
+    height: 4px;
+    background: #ddd;
+    border: none;
+    border-radius: 2px;
+}
+
+#gridLength::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    margin-top: -6px;
+    border-radius: 50%;
+    background: #4a90e2;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+#gridLength::-moz-range-track {
+    height: 4px;
+    background: #ddd;
+    border: none;
+    border-radius: 2px;
+}
+
+#gridLength::-moz-range-progress {
+    height: 4px;
+    background: #4a90e2;
+    border-radius: 2px;
+}
+
+#gridLength::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #4a90e2;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
 }
 
 /* ---- Dual-handle range slider ---- */
@@ -198,4 +276,61 @@ body {
 .dialogButton:focus-visible {
     outline: 3px solid rgba(74, 144, 226, 0.35);
     outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 8px 4px 20px;
+    }
+
+    #Canvas {
+        margin-bottom: 18px;
+    }
+
+    #Game-canvasContainer {
+        width: 100%;
+    }
+
+    #Canvas .Game-Canvas {
+        width: 100%;
+        height: auto;
+    }
+
+    #GameStats {
+        flex-wrap: wrap;
+        gap: 8px 14px;
+        margin-bottom: 14px;
+        font-size: 16px;
+    }
+
+    #GameMenu {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    .sliderContainer {
+        display: grid;
+        grid-template-columns: minmax(94px, max-content) minmax(0, 1fr) minmax(44px, max-content);
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0;
+        text-align: left;
+    }
+
+    .sliderContainer > * {
+        margin: 0;
+    }
+
+    #gridLength,
+    .dualRange {
+        width: 100%;
+        min-width: 0;
+    }
+
+    #gridLengthLabel,
+    #spawnRangeLabel {
+        text-align: right;
+        white-space: nowrap;
+    }
 }
