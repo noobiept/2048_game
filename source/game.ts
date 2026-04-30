@@ -37,7 +37,10 @@ export function init() {
     startRound();
 
     const canvasElement = document.querySelector<HTMLElement>('#Canvas')!;
+    const restartButton = document.querySelector<HTMLButtonElement>('#restartButton')!;
+
     document.body.addEventListener('keyup', keyUpEvents);
+    restartButton.addEventListener('click', restart);
     canvasElement.addEventListener('pointerdown', pointerDownEvent);
     canvasElement.addEventListener('pointerup', pointerUpEvent);
     canvasElement.addEventListener('pointercancel', pointerCancelEvent);

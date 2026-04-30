@@ -41,6 +41,7 @@ body {
 
 #GameStats {
     display: flex;
+    align-items: center;
     justify-content: center;
     gap: 24px;
     margin-bottom: 18px;
@@ -54,6 +55,28 @@ body {
     min-width: 9ch;
     font-variant-numeric: tabular-nums;
     text-align: left;
+}
+
+#restartButton {
+    padding: 5px 12px;
+    color: white;
+    background: #2f6fb3;
+    border: 1px solid #255b95;
+    border-radius: 6px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+#restartButton:hover {
+    background: #255b95;
+}
+
+#restartButton:focus-visible {
+    outline: 3px solid rgba(74, 144, 226, 0.35);
+    outline-offset: 2px;
 }
 
 #GameMenu {
