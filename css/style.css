@@ -349,6 +349,43 @@ body {
     .dualRange {
         width: 100%;
         min-width: 0;
+        height: 52px;
+    }
+
+    #gridLength,
+    .dualRange input[type='range'] {
+        touch-action: pan-y;
+    }
+
+    #gridLength::-webkit-slider-runnable-track,
+    .dualRange-track,
+    .dualRange-fill {
+        height: 8px;
+        border-radius: 4px;
+    }
+
+    #gridLength::-webkit-slider-thumb,
+    .dualRange input[type='range']::-webkit-slider-thumb {
+        width: 34px;
+        height: 34px;
+        border-width: 4px;
+    }
+
+    #gridLength::-webkit-slider-thumb {
+        margin-top: -13px;
+    }
+
+    #gridLength::-moz-range-thumb,
+    .dualRange input[type='range']::-moz-range-thumb {
+        width: 34px;
+        height: 34px;
+        border-width: 4px;
+    }
+
+    #gridLength::-moz-range-track,
+    #gridLength::-moz-range-progress {
+        height: 8px;
+        border-radius: 4px;
     }
 
     #gridLengthLabel,
