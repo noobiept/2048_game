@@ -1,9 +1,9 @@
 {
     "name": "2048_game",
     "description": "A sliding block puzzle game.",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "license": "AGPL-3.0",
-    "packageManager": "pnpm@10.33.2",
+    "packageManager": "pnpm@11.1.1",
     "scripts": {
         "lint": "eslint source",
         "format": "prettier . --write",
@@ -15,16 +15,16 @@
         "preview": "vite preview"
     },
     "devDependencies": {
-        "@eslint/js": "^9.39.4",
-        "eslint": "^9.39.4",
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.3.0",
         "eslint-import-resolver-typescript": "^4.4.4",
         "eslint-plugin-import": "^2.32.0",
-        "globals": "^17.5.0",
+        "globals": "^17.6.0",
         "prettier": "^3.8.3",
         "typescript": "^6.0.3",
-        "typescript-eslint": "^8.59.1",
-        "vite": "^8.0.10",
-        "vitest": "^4.1.5"
+        "typescript-eslint": "^8.59.3",
+        "vite": "^8.0.12",
+        "vitest": "^4.1.6"
     },
     "dependencies": {
         "@drk4/game-engine": "^2.0.0"
